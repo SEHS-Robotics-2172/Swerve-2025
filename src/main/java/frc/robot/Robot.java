@@ -93,10 +93,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("Z", LimelightHelpers.getTargetPose3d_CameraSpace("").getZ());
-    SmartDashboard.putNumber("X", LimelightHelpers.getTargetPose3d_CameraSpace("").getX());
-    SmartDashboard.putNumber("LL Rotation", Rotation2d.fromRadians(LimelightHelpers.getCameraPose3d_TargetSpace("").getRotation().getZ()).getDegrees());
-    SmartDashboard.putNumber("Gyro Rotation", swerve.getGyroYaw().getDegrees());
     LimelightHelpers.SetRobotOrientation("", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
   }
 
