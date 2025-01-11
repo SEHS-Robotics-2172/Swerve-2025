@@ -5,8 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
@@ -14,18 +15,20 @@ import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralStationAligment extends Command {
-  PIDController strafeController = new PIDController(0.1, 0.001, 0.002);
-  PIDController driveController = new PIDController(0.1, 0.001, 0.002);
+  PIDController strafeController = new PIDController(1, 0.001, 0.002);
+  PIDController driveController = new PIDController(0.3, 0.001, 0.002);
+  double strafeValue;
+  double driveValue;
   Swerve swerve;
-  Pose3d targetPosition;
-  Pose3d wantedError = new Pose3d(0, 1, 0, new Rotation3d(0, 0, 0));
-  Pose3d error;
+  Pose2d targetPosition;
+  Pose2d wantedError = new Pose2d(0, 0, new Rotation2d(0));
+  Transform2d error;
   /** Creates a new CoralStationAligment. */
   public CoralStationAligment(Swerve swerve_) {
     this.swerve = swerve_;
     addRequirements(swerve_);
-    targetPosition = LimelightHelpers.getTargetPose3d_CameraSpace("");
     strafeController.setTolerance(0.05);
+    System.out.println("Initialized");
   }
 
   // Called when the command is initially scheduled.
@@ -35,21 +38,31 @@ public class CoralStationAligment extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = new Pose3d(targetPosition.minus(wantedError).getX(),
-    targetPosition.minus(wantedError).getY(),
-    targetPosition.minus(wantedError).getZ(),
-    targetPosition.getRotation().minus(wantedError.getRotation()));
+    System.out.println("Executing");
+
+    targetPosition = new Pose2d(
+      LimelightHelpers.getTargetPose3d_CameraSpace("").getX(), 
+      -LimelightHelpers.getTargetPose3d_CameraSpace("").getZ(),
+      Rotation2d.fromDegrees(0)
+      );
+    
+    error = (targetPosition.minus(wantedError));
+
+    strafeValue = strafeController.calculate(error.getX() * 10);
+    driveValue = driveController.calculate(error.getY());
     swerve.drive(
-      new Translation2d(strafeController.calculate(error.getX()), driveController.calculate(error.getZ())),
+      new Translation2d(driveValue, strafeValue),
       0,
       true,
       true
     );
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Ended");
     strafeController.reset();
     driveController.reset();
   }

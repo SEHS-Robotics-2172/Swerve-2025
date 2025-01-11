@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Swerve;
@@ -91,9 +92,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    LimelightHelpers.SetRobotOrientation("limelight", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
-    Pose2d botPose = LimelightHelpers.getBotPose2d_wpiBlue("");
-    LimelightHelpers.getTargetPose3d_CameraSpace("");
+    SmartDashboard.putNumber("Z", LimelightHelpers.getTargetPose3d_CameraSpace("").getZ());
+    SmartDashboard.putNumber("X", LimelightHelpers.getTargetPose3d_CameraSpace("").getX());
+    LimelightHelpers.SetRobotOrientation("", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
   }
 
   @Override
