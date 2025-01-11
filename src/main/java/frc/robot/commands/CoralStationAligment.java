@@ -16,12 +16,13 @@ import frc.robot.subsystems.Swerve;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralStationAligment extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
-  PIDController driveController = new PIDController(0.3, 0.001, 0.002);
+  PIDController driveController = new PIDController(0.5, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.3, 0.001, 0.002);
   double strafeValue;
   double driveValue;
   Swerve swerve;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d wantedError = new Pose2d(0, -0.5, new Rotation2d(0));
   Transform2d error;
   /** Creates a new CoralStationAligment. */
   public CoralStationAligment(Swerve swerve_) {
@@ -48,7 +49,7 @@ public class CoralStationAligment extends Command {
     
     error = (targetPosition.minus(wantedError));
 
-    strafeValue = strafeController.calculate(error.getX() * 10);
+    strafeValue = strafeController.calculate(error.getX());
     driveValue = driveController.calculate(error.getY());
     swerve.drive(
       new Translation2d(driveValue, strafeValue),
