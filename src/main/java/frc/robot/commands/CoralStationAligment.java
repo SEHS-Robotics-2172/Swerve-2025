@@ -40,7 +40,6 @@ public class CoralStationAligment extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
     targetPosition = new Pose2d(
       -LimelightHelpers.getCameraPose3d_TargetSpace("").getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace("").getZ(),
@@ -74,9 +73,16 @@ public class CoralStationAligment extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if ((LimelightHelpers.getTargetCount("") == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 ))
-      return true;
+
+    if (LimelightHelpers.getFiducialID("") != 1.0 && LimelightHelpers.getFiducialID("") != 2.0
+        && LimelightHelpers.getFiducialID("") != 12.0 && LimelightHelpers.getFiducialID("") != 13.0)
+        return true;
+
+    if ((LimelightHelpers.getTargetCount("") == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )){
+        return true;
+    }
     else
       return false;
+    
   }
 }
