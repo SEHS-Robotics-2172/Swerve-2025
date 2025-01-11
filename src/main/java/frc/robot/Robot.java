@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -94,6 +95,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     SmartDashboard.putNumber("Z", LimelightHelpers.getTargetPose3d_CameraSpace("").getZ());
     SmartDashboard.putNumber("X", LimelightHelpers.getTargetPose3d_CameraSpace("").getX());
+    SmartDashboard.putNumber("LL Rotation", Rotation2d.fromRadians(LimelightHelpers.getCameraPose3d_TargetSpace("").getRotation().getZ()).getDegrees());
+    SmartDashboard.putNumber("Gyro Rotation", swerve.getGyroYaw().getDegrees());
     LimelightHelpers.SetRobotOrientation("", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
   }
 
