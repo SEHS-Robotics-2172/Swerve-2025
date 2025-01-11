@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,6 +26,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   
   private Swerve swerve;
+  TalonFX test;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -85,12 +90,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    LimelightHelpers.SetRobotOrientation("limelight", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+    Pose2d botPose = LimelightHelpers.getBotPose2d_wpiBlue("");
+    LimelightHelpers.getTargetPose3d_CameraSpace("");
+  }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    
   }
   /** This function is called periodically during test mode. */
   @Override
