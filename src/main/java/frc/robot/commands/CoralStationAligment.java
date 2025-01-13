@@ -35,7 +35,9 @@ public class CoralStationAligment extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    LimelightHelpers.SetFiducialIDFiltersOverride("", new int[]{1, 2, 12, 13}); // Only track these tag IDs
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -68,15 +70,13 @@ public class CoralStationAligment extends Command {
     System.out.println("Ended");
     strafeController.reset();
     driveController.reset();
+    rotationController.reset();
+    LimelightHelpers.SetFiducialIDFiltersOverride("", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22});
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    if (LimelightHelpers.getFiducialID("") != 1.0 && LimelightHelpers.getFiducialID("") != 2.0
-        && LimelightHelpers.getFiducialID("") != 12.0 && LimelightHelpers.getFiducialID("") != 13.0)
-        return true;
 
     if ((LimelightHelpers.getTargetCount("") == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )){
         return true;
