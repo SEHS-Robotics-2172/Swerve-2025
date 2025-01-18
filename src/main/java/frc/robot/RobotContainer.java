@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -33,6 +32,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
+    public final Elevator elevator = new Elevator();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -61,6 +61,11 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve));
+        elevator.addWantedPosition(
+            driver.getRawAxis(XboxController.Axis.kRightTrigger.value)
+            - 
+            driver.getRawAxis(XboxController.Axis.kLeftTrigger.value)
+        );
     }
 
     /**
