@@ -16,8 +16,8 @@ public final class Constants {
     public static final double stickDeadband = 0.06;
 
     public static final class Elevator {
-        public static final int motor2ID = 20;
-        public static final int motor1ID = 21;
+        public static final int motor2ID = 25;
+        public static final int motor1ID = 26;
     }
 
     public static final class Swerve {

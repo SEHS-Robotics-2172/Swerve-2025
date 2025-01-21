@@ -18,7 +18,8 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(2);
+    public final XboxController driver = new XboxController(1);
+    public final XboxController co_driver = new XboxController(2);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -29,6 +30,11 @@ public class RobotContainer {
     private final JoystickButton coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton set0 = new JoystickButton(co_driver, XboxController.Button.kA.value);
+    private final JoystickButton set10 = new JoystickButton(co_driver, XboxController.Button.kX.value);
+    private final JoystickButton set20 = new JoystickButton(co_driver, XboxController.Button.kY.value);
+    private final JoystickButton set30 = new JoystickButton(co_driver, XboxController.Button.kB.value);
+    private final JoystickButton set40 = new JoystickButton(co_driver, XboxController.Button.kRightStick.value);
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
@@ -61,11 +67,12 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve));
-        elevator.addWantedPosition(
-            driver.getRawAxis(XboxController.Axis.kRightTrigger.value)
-            - 
-            driver.getRawAxis(XboxController.Axis.kLeftTrigger.value)
-        );
+        set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
+        set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(10)));
+        set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(20)));
+        set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
+        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(37)));
+
     }
 
     /**
