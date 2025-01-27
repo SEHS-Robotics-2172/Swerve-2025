@@ -18,7 +18,7 @@ public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   private TalonFX motor1;
   private TalonFX motor2;
-  private PIDController elevatorPID = new PIDController(0.03, 0.0012, 0);
+  private PIDController elevatorPID = new PIDController(0.035, 0.0012, 0);
   double wantedPosition = 0;
   TalonFXConfiguration config = new TalonFXConfiguration(); 
   public Elevator() {

@@ -71,7 +71,7 @@ public class RobotContainer {
         set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(10)));
         set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(20)));
         set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
-        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(37)));
+        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(38.2)));
 
     }
 
