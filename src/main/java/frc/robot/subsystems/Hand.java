@@ -49,9 +49,6 @@ public class Hand extends SubsystemBase {
   public double getEncoderPosition(){
     return wristMotor.getAlternateEncoder().getPosition();
   }
-  public void addWantedPosition(double rotations){
-    wantedPosition += (7.75 * rotations * handPID.getPeriod());
-  }
   public void setWantedPosition(double rotations){
     wantedPosition = rotations;
   }
