@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.*;
 import com.revrobotics.spark.SparkMax;
@@ -12,7 +8,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 //if (button==pressed){
@@ -27,7 +22,6 @@ public class Hand extends SubsystemBase {
     SparkMaxConfig wristConfig = new SparkMaxConfig();  
     SparkMaxConfig intakeCCW = new SparkMaxConfig();
     SparkMaxConfig intakeCW = new SparkMaxConfig();
-    AbsoluteEncoder encoder;
 
     public Hand(){
         wristConfig.inverted(false);
@@ -45,17 +39,15 @@ public class Hand extends SubsystemBase {
         wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         intakeMotor1.configure(intakeCCW, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         intakeMotor2.configure(intakeCW, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        encoder = wristMotor.getAbsoluteEncoder();
-
     }
-    
  @Override
   public void periodic() {
     handPID.setSetpoint(wantedPosition);
-    double wristSpeed = handPID.calculate(encoder.getPosition());
+    double wristSpeed = handPID.calculate(getEncoderPosition());
     wristMotor.set(wristSpeed);
-
+  }
+  public double getEncoderPosition(){
+    return wristMotor.getAlternateEncoder().getPosition();
   }
   public void addWantedPosition(double rotations){
     wantedPosition += (7.75 * rotations * handPID.getPeriod());
@@ -63,5 +55,4 @@ public class Hand extends SubsystemBase {
   public void setWantedPosition(double rotations){
     wantedPosition = rotations;
   }
-
 }
