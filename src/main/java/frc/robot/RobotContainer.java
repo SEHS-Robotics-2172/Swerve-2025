@@ -31,7 +31,7 @@ public class RobotContainer {
 
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final Trigger robotCentric = new JoystickButton(co_driver, XboxController.Button.kLeftBumper.value);
     private final Trigger set0 = new Trigger(() -> (co_driver.getPOV() == 0));
     private final Trigger set10 = new Trigger(() -> (co_driver.getPOV() ==270));
     private final Trigger set20 = new Trigger(() -> (co_driver.getPOV() == 180));
@@ -75,8 +75,8 @@ public class RobotContainer {
         set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
         set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(45)));
         set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(63)));
-        intakePosition.whileTrue(new InstantCommand(() -> hand.setWantedPosition(0.44)));
-        intakePosition.whileFalse(new InstantCommand(() -> hand.setWantedPosition(0.24)));
+        intakePosition.whileTrue(new InstantCommand(() -> hand.setWantedPosition(0.42)));
+        intakePosition.whileFalse(new InstantCommand(() -> hand.setWantedPosition(0.20)));
     }
 
     /**

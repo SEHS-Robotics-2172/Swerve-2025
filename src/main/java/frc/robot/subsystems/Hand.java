@@ -21,7 +21,7 @@ public class Hand extends SubsystemBase {
     private TalonFX wristMotor;
     private SparkMax intakeMotor1;
     private SparkMax intakeMotor2;
-    public PIDController handPID = new PIDController(0.9, 0, 0);
+    public PIDController handPID = new PIDController(0.9, 0.02, 0);
     double wantedPosition = 0;
     TalonFXConfiguration wristConfig = new TalonFXConfiguration();
     SparkMaxConfig intakeCCW = new SparkMaxConfig();
@@ -42,8 +42,9 @@ public class Hand extends SubsystemBase {
       intakeMotor2 = new SparkMax(Constants.Hand.intakeMotor2ID, MotorType.kBrushless);
       
       wristMotor.getConfigurator().apply(wristConfig);
-      intakeMotor1.configure(intakeCCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-      intakeMotor2.configure(intakeCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+      //intakeMotor1.configure(intakeCCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+      //intakeMotor2.configure(intakeCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+      setWantedPosition(0.32);
     }
  @Override
   public void periodic() {
