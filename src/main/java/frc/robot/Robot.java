@@ -7,8 +7,11 @@ package frc.robot;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -22,6 +25,10 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+
+  private Elevator elevator;
+  private Hand hand;
+  private XboxController co_driver;
   
   private Swerve swerve;
   TalonFX test;
@@ -34,7 +41,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    hand = m_robotContainer.hand;
     swerve = m_robotContainer.s_Swerve;
+    elevator = m_robotContainer.elevator;
+    co_driver =  m_robotContainer.co_driver;
+
   }
 
   /**
@@ -84,6 +95,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    hand.handPID.reset();
   }
 
   /** This function is called periodically during operator control. */

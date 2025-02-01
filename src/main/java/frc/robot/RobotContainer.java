@@ -1,11 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -27,6 +27,9 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
+    private final Trigger intakePosition = new Trigger(() -> (co_driver.getPOV()==90));
+    private final Trigger shooter = new Trigger(() -> (true));
+
     private final JoystickButton coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
@@ -37,6 +40,7 @@ public class RobotContainer {
     private final JoystickButton set40 = new JoystickButton(co_driver, XboxController.Button.kRightStick.value);
 
     /* Subsystems */
+    public Hand hand = new Hand();
     public final Swerve s_Swerve = new Swerve();
     public final Elevator elevator = new Elevator();
 
@@ -46,9 +50,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -co_driver.getRawAxis(translationAxis), 
+                () -> -co_driver.getRawAxis(strafeAxis), 
+                () -> -co_driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -68,11 +72,13 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve));
         set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
-        set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(10)));
-        set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(20)));
-        set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
-        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(38.2)));
-
+        set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(15)));
+        set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
+        set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(45)));
+        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(55)));
+        intakePosition.whileTrue(new InstantCommand(() -> hand.setWantedPosition(0.44)));
+        intakePosition.whileFalse(new InstantCommand(() -> hand.setWantedPosition(0.28)));
+        shooter.whileTrue(new InstantCommand(() -> hand.setIntakeSpeed(co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis())));
     }
 
     /**

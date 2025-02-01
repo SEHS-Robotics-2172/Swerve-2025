@@ -18,6 +18,7 @@ public final class Constants {
     public static final class Elevator {
         public static final int motor2ID = 25;
         public static final int motor1ID = 26;
+        public static final int encoderID = 39;
     }
 
     public static final class Hand{
