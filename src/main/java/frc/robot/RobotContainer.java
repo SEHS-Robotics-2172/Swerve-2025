@@ -27,17 +27,16 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final Trigger intakePosition = new Trigger(() -> (co_driver.getPOV()==90));
-    private final Trigger shooter = new Trigger(() -> (true));
+    private final Trigger intakePosition = new Trigger(() -> (co_driver.getAButton()));
 
-    private final JoystickButton coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton set0 = new JoystickButton(co_driver, XboxController.Button.kA.value);
-    private final JoystickButton set10 = new JoystickButton(co_driver, XboxController.Button.kX.value);
-    private final JoystickButton set20 = new JoystickButton(co_driver, XboxController.Button.kY.value);
-    private final JoystickButton set30 = new JoystickButton(co_driver, XboxController.Button.kB.value);
-    private final JoystickButton set40 = new JoystickButton(co_driver, XboxController.Button.kRightStick.value);
+    private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final Trigger set0 = new Trigger(() -> (co_driver.getPOV() == 0));
+    private final Trigger set10 = new Trigger(() -> (co_driver.getPOV() ==270));
+    private final Trigger set20 = new Trigger(() -> (co_driver.getPOV() == 180));
+    private final Trigger set30 = new Trigger(() -> (co_driver.getPOV() == 90));
+    private final Trigger set40 = new Trigger(() -> (co_driver.getRightStickButton()));
 
     /* Subsystems */
     public Hand hand = new Hand();
@@ -75,10 +74,9 @@ public class RobotContainer {
         set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(15)));
         set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
         set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(45)));
-        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(55)));
+        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(63)));
         intakePosition.whileTrue(new InstantCommand(() -> hand.setWantedPosition(0.44)));
-        intakePosition.whileFalse(new InstantCommand(() -> hand.setWantedPosition(0.28)));
-        shooter.whileTrue(new InstantCommand(() -> hand.setIntakeSpeed(co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis())));
+        intakePosition.whileFalse(new InstantCommand(() -> hand.setWantedPosition(0.24)));
     }
 
     /**

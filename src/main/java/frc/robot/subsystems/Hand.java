@@ -21,7 +21,7 @@ public class Hand extends SubsystemBase {
     private TalonFX wristMotor;
     private SparkMax intakeMotor1;
     private SparkMax intakeMotor2;
-    public PIDController handPID = new PIDController(0.5, 0.1, 0);
+    public PIDController handPID = new PIDController(0.9, 0, 0);
     double wantedPosition = 0;
     TalonFXConfiguration wristConfig = new TalonFXConfiguration();
     SparkMaxConfig intakeCCW = new SparkMaxConfig();
