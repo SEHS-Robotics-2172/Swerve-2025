@@ -36,16 +36,16 @@ public class CoralStationAligment extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    LimelightHelpers.SetFiducialIDFiltersOverride("", new int[]{1, 2, 12, 13}); // Only track these tag IDs
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-new", new int[]{1, 2, 12, 13}); // Only track these tag IDs
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     targetPosition = new Pose2d(
-      -LimelightHelpers.getCameraPose3d_TargetSpace("").getX(), 
-      LimelightHelpers.getCameraPose3d_TargetSpace("").getZ(),
-      Rotation2d.fromDegrees(LimelightHelpers.getTX(""))
+      -LimelightHelpers.getCameraPose3d_TargetSpace("limelight-new").getX(), 
+      LimelightHelpers.getCameraPose3d_TargetSpace("limelight-new").getZ(),
+      Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight-new"))
       );
       
       error = (targetPosition.minus(wantedError));

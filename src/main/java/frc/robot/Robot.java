@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     hand.setIntakeSpeed(co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis());
-    LimelightHelpers.SetRobotOrientation("", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-new", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
   }
 
   @Override

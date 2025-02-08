@@ -44,6 +44,7 @@ public class Elevator extends SubsystemBase {
     motor2.setPosition(getRotations());
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);
+
   }
 
   @Override

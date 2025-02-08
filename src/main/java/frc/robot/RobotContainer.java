@@ -27,7 +27,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     private final double wristScoreTRotation = 0.2;
-    private final double wristIntakeRotation = 0.4;
+    private final double wristIntakeRotation = 0.525;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -52,9 +52,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -co_driver.getRawAxis(translationAxis), 
-                () -> -co_driver.getRawAxis(strafeAxis), 
-                () -> -co_driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -79,12 +79,12 @@ public class RobotContainer {
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(2);
+            elevator.setWantedPosition(4);
             hand.setWantedPosition(wristScoreTRotation);
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(4);
+            elevator.setWantedPosition(6);
             hand.setWantedPosition(0);
         }));
 
