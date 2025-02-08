@@ -28,9 +28,10 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final Trigger intakePosition = new Trigger(() -> (co_driver.getAButton()));
+    private final Trigger scorePosition = new Trigger(() -> (co_driver.getBButton()));
 
-    private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final Trigger coralStation = new JoystickButton(co_driver, XboxController.Button.kX.value);
+    private final Trigger zeroGyro = new JoystickButton(co_driver, XboxController.Button.kY.value);
     private final Trigger robotCentric = new JoystickButton(co_driver, XboxController.Button.kLeftBumper.value);
     private final Trigger set0 = new Trigger(() -> (co_driver.getPOV() == 0));
     private final Trigger set10 = new Trigger(() -> (co_driver.getPOV() ==270));
@@ -71,12 +72,14 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve));
         set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
-        set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(15)));
-        set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(30)));
-        set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(45)));
-        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(63)));
-        intakePosition.whileTrue(new InstantCommand(() -> hand.setWantedPosition(0.42)));
-        intakePosition.whileFalse(new InstantCommand(() -> hand.setWantedPosition(0.20)));
+        set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(2)));
+        set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(4)));
+        set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(6)));
+        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(8)));
+        intakePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(0.4)));
+        intakePosition.onFalse(new InstantCommand(() -> hand.setWantedPosition(0.2)));
+        scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(0.6)));
+
     }
 
     /**

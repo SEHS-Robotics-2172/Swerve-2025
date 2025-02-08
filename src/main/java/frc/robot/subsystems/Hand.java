@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkBase.*;
@@ -20,15 +23,19 @@ import frc.robot.Constants;
 public class Hand extends SubsystemBase {
     private TalonFX wristMotor;
     private SparkMax intakeMotor1;
-    private SparkMax intakeMotor2;
-    public PIDController handPID = new PIDController(0.9, 0.02, 0);
+    public SparkMax intakeMotor2;
+    public PositionVoltage handPID = new PositionVoltage(0);
     double wantedPosition = 0;
     TalonFXConfiguration wristConfig = new TalonFXConfiguration();
     SparkMaxConfig intakeCCW = new SparkMaxConfig();
     SparkMaxConfig intakeCW = new SparkMaxConfig();
 
     public Hand(){
-
+      wristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+      wristConfig.Slot0.kP = 15;
+      wristConfig.Slot0.kI = 0.1;
+      wristConfig.Slot0.kG = 0.1;
+      wristConfig.Feedback.SensorToMechanismRatio = 10/1;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
       intakeCCW.inverted(true);
       intakeCW.inverted(false);
@@ -42,27 +49,24 @@ public class Hand extends SubsystemBase {
       intakeMotor2 = new SparkMax(Constants.Hand.intakeMotor2ID, MotorType.kBrushless);
       
       wristMotor.getConfigurator().apply(wristConfig);
-      //intakeMotor1.configure(intakeCCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-      //intakeMotor2.configure(intakeCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-      setWantedPosition(0.32);
+      resetToAbsolute();
     }
  @Override
   public void periodic() {
     SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
+    SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Wanted Wrist Position", wantedPosition); 
-
-    handPID.setSetpoint(wantedPosition);
-    double wristSpeed = handPID.calculate(getEncoderPosition());
-    wristMotor.set(wristSpeed);
+    wristMotor.setControl(handPID.withPosition(wantedPosition));
   }
   public double getEncoderPosition(){
     return intakeMotor2.getAlternateEncoder().getPosition();
   }
+  public void resetToAbsolute(){
+    double absolutePosition = getEncoderPosition();
+    wristMotor.setPosition(absolutePosition);
+}
   public void setWantedPosition(double rotations){
     wantedPosition = rotations;
-  }
-  public void addWantedPosition(double rotations){
-    wantedPosition += rotations * handPID.getPeriod();
   }
   public void setIntakeSpeed(double speed){
     intakeMotor1.set(speed);

@@ -95,7 +95,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    hand.handPID.reset();
   }
 
   /** This function is called periodically during operator control. */

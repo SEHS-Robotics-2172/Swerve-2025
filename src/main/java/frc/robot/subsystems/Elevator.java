@@ -5,14 +5,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,37 +22,46 @@ public class Elevator extends SubsystemBase {
   private TalonFX motor1;
   private TalonFX motor2;
   private SparkMax encoder;
-  private PIDController elevatorPID = new PIDController(0.1, 0.0006, 0.0025);
+  private PositionVoltage elevatorPID = new PositionVoltage(0);
   double wantedPosition = 0;
   TalonFXConfiguration config = new TalonFXConfiguration(); 
   public Elevator() {
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
+    config.Feedback.SensorToMechanismRatio = 7.75 / 2;
+    config.Slot0.kI = 0.1;
+    config.Slot0.kP = 4;
+    config.Slot0.kD = 0;
+    config.Slot0.kV = 0;
+    config.Slot0.kA = 0;
+    config.Slot0.kG = 0.7;
     motor1 = new TalonFX(Constants.Elevator.motor1ID);
     motor2 = new TalonFX(Constants.Elevator.motor2ID);
     encoder = new SparkMax(Constants.Elevator.encoderID, MotorType.kBrushed);
     motor1.getConfigurator().apply(config);
     motor2.getConfigurator().apply(config);
-    motor1.setPosition(0);
-    motor2.setPosition(0);
+    motor1.setPosition(getRotations());
+    motor2.setPosition(getRotations());
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);
   }
 
   @Override
   public void periodic() {
-    elevatorPID.setSetpoint(wantedPosition);
-    double speed = elevatorPID.calculate(getRotations());
-    motor1.set(speed);
-    motor2.set(speed);
-    SmartDashboard.putNumber("Elevator Position", getRotations()); 
+    PositionVoltage speed = elevatorPID.withPosition(wantedPosition);
+    motor1.setControl(speed);
+    motor2.setControl(speed);
+    SmartDashboard.putNumber("Elevator Absolute Position", getRotations()); 
+    SmartDashboard.putNumber("Elevator Position", motor1.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Elevator Wanted Position", wantedPosition); 
   }
   public void addWantedPosition(double rotations){
-    wantedPosition += (rotations * elevatorPID.getPeriod());
+    wantedPosition += (rotations * 0.02);
   }
   public void setWantedPosition(double rotations){
     wantedPosition = rotations;
   }
   public double getRotations(){
-    return encoder.getEncoder().getPosition() * 7.75;
+    return encoder.getEncoder().getPosition();
   }
 }
