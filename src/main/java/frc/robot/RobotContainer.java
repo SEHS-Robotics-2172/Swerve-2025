@@ -26,18 +26,20 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    /* Driver Buttons */
-    private final Trigger intakePosition = new Trigger(() -> (co_driver.getAButton()));
-    private final Trigger scorePosition = new Trigger(() -> (co_driver.getBButton()));
+    private final double wristScoreTRotation = 0.2;
+    private final double wristIntakeRotation = 0.4;
 
-    private final Trigger coralStation = new JoystickButton(co_driver, XboxController.Button.kX.value);
-    private final Trigger zeroGyro = new JoystickButton(co_driver, XboxController.Button.kY.value);
-    private final Trigger robotCentric = new JoystickButton(co_driver, XboxController.Button.kLeftBumper.value);
-    private final Trigger set0 = new Trigger(() -> (co_driver.getPOV() == 0));
-    private final Trigger set10 = new Trigger(() -> (co_driver.getPOV() ==270));
-    private final Trigger set20 = new Trigger(() -> (co_driver.getPOV() == 180));
-    private final Trigger set30 = new Trigger(() -> (co_driver.getPOV() == 90));
-    private final Trigger set40 = new Trigger(() -> (co_driver.getRightStickButton()));
+    /* Driver Buttons */
+    private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
+    private final Trigger setLevelTwo = new Trigger(() -> (co_driver.getAButton()));
+    private final Trigger setLevelThree = new Trigger(() -> (co_driver.getBButton()));
+    private final Trigger setLevelFour = new Trigger(() -> (co_driver.getYButton()));
+    private final Trigger scorePosition = new Trigger(() -> (co_driver.getXButton()));
+    
+   
 
     /* Subsystems */
     public Hand hand = new Hand();
@@ -71,14 +73,22 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve));
+
         set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
-        set10.onTrue(new InstantCommand(() -> elevator.setWantedPosition(2)));
-        set20.onTrue(new InstantCommand(() -> elevator.setWantedPosition(4)));
-        set30.onTrue(new InstantCommand(() -> elevator.setWantedPosition(6)));
-        set40.onTrue(new InstantCommand(() -> elevator.setWantedPosition(8)));
-        intakePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(0.4)));
-        intakePosition.onFalse(new InstantCommand(() -> hand.setWantedPosition(0.2)));
-        scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(0.6)));
+
+        setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
+
+        setLevelThree.onTrue(new InstantCommand(() -> {
+            elevator.setWantedPosition(2);
+            hand.setWantedPosition(wristScoreTRotation);
+        }));
+
+        setLevelFour.onTrue(new InstantCommand(() -> {
+            elevator.setWantedPosition(4);
+            hand.setWantedPosition(0);
+        }));
+
+        scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation)));
 
     }
 
