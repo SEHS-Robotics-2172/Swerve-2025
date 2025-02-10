@@ -46,6 +46,11 @@ public class Robot extends TimedRobot {
     elevator = m_robotContainer.elevator;
     co_driver =  m_robotContainer.co_driver;
 
+    //if (robot.existing == true) {
+    //  robot.fix();
+    //  robot.work();
+    //}
+
   }
 
   /**
