@@ -33,12 +33,13 @@ public class RobotContainer {
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    
+    /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
     private final Trigger setLevelTwo = new Trigger(() -> (co_driver.getAButton()));
     private final Trigger setLevelThree = new Trigger(() -> (co_driver.getBButton()));
     private final Trigger setLevelFour = new Trigger(() -> (co_driver.getYButton()));
     private final Trigger scorePosition = new Trigger(() -> (co_driver.getXButton()));
-    
    
 
     /* Subsystems */
