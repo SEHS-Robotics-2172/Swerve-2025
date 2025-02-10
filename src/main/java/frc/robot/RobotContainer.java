@@ -27,7 +27,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     private final double wristScoreTRotation = 0.2;
-    private final double wristIntakeRotation = 0.525;
+    private final double wristIntakeRotation = 0.48;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -84,7 +84,7 @@ public class RobotContainer {
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(6);
+            elevator.setWantedPosition(8);
             hand.setWantedPosition(0);
         }));
 

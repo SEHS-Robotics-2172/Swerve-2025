@@ -34,7 +34,7 @@ public class Elevator extends SubsystemBase {
     config.Slot0.kD = 0;
     config.Slot0.kV = 0;
     config.Slot0.kA = 0;
-    config.Slot0.kG = 0.7;
+    config.Slot0.kG = 0.4;
     motor1 = new TalonFX(Constants.Elevator.motor1ID);
     motor2 = new TalonFX(Constants.Elevator.motor2ID);
     encoder = new SparkMax(Constants.Elevator.encoderID, MotorType.kBrushed);
@@ -44,7 +44,6 @@ public class Elevator extends SubsystemBase {
     motor2.setPosition(getRotations());
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);
-
   }
 
   @Override
@@ -64,5 +63,8 @@ public class Elevator extends SubsystemBase {
   }
   public double getRotations(){
     return encoder.getEncoder().getPosition();
+  }
+  public void resetToZero(){
+    encoder.getEncoder().setPosition(0);
   }
 }
