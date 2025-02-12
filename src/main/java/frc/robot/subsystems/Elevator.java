@@ -29,7 +29,7 @@ public class Elevator extends SubsystemBase {
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     config.Feedback.SensorToMechanismRatio = 7.75 / 2;
-    config.Slot0.kI = 0.1;
+    config.Slot0.kI = 0.5;
     config.Slot0.kP = 4;
     config.Slot0.kD = 0;
     config.Slot0.kV = 0;

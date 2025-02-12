@@ -37,6 +37,7 @@ public class Hand extends SubsystemBase {
       wristConfig.Slot0.kG = 0.1;
       wristConfig.Feedback.SensorToMechanismRatio = 10/1;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
       intakeCCW.inverted(true);
       intakeCW.inverted(false);
       
@@ -49,7 +50,6 @@ public class Hand extends SubsystemBase {
       intakeMotor2 = new SparkMax(Constants.Hand.intakeMotor2ID, MotorType.kBrushless);
       
       wristMotor.getConfigurator().apply(wristConfig);
-      resetToAbsolute();
     }
  @Override
   public void periodic() {

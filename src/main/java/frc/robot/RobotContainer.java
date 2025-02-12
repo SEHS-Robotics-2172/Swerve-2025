@@ -26,8 +26,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    private final double wristScoreTRotation = 0.2;
-    private final double wristIntakeRotation = 0.48;
+    public static final double wristScoreTRotation = 0.3;
+    public static final double wristIntakeRotation = 0.53;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -40,6 +40,7 @@ public class RobotContainer {
     private final Trigger setLevelThree = new Trigger(() -> (co_driver.getBButton()));
     private final Trigger setLevelFour = new Trigger(() -> (co_driver.getYButton()));
     private final Trigger scorePosition = new Trigger(() -> (co_driver.getXButton()));
+    private final Trigger level4Score = new Trigger(() -> (co_driver.getLeftBumperButton()));
    
 
     /* Subsystems */
@@ -50,6 +51,10 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        hand.setDefaultCommand(new intakeSpeed(
+            hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis())
+            )
+        );
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -73,23 +78,25 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        coralStation.onTrue(new CoralStationAligment(s_Swerve));
+        coralStation.onTrue(new Reef(s_Swerve, hand));
 
         set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
 
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(4);
+            elevator.setWantedPosition(3.6);
             hand.setWantedPosition(wristScoreTRotation);
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(8);
-            hand.setWantedPosition(0);
+            elevator.setWantedPosition(8.3);
+            hand.setWantedPosition(wristScoreTRotation);
         }));
 
         scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation)));
+
+        level4Score.onTrue(new level4(hand));
 
     }
 
