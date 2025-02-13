@@ -17,7 +17,7 @@ import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralStationAligment extends Command {
+public class Reef extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
   PIDController rotationController = new PIDController(0.05, 0.001, 0.002);
@@ -29,9 +29,9 @@ public class CoralStationAligment extends Command {
   Pose2d targetPosition;
   Pose2d wantedError = new Pose2d(0, -0.3, new Rotation2d(0));
   Transform2d error;
-  String LimelightName = "";
+  String LimelightName = "limelight-old";
   /** Creates a new CoralStationAligment. */
-  public CoralStationAligment(Swerve swerve_, Hand hand_) {
+  public Reef(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;
     this.hand = hand_;
     addRequirements(swerve_, hand_);
