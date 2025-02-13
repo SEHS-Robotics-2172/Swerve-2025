@@ -4,14 +4,25 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
@@ -27,9 +38,9 @@ public class Reef extends Command {
   double rotationValue;
   Swerve swerve;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(0, -0.3, new Rotation2d(0));
+  Pose2d wantedError = new Pose2d(-0.1, -0.2, Rotation2d.fromDegrees(-7));
   Transform2d error;
-  String LimelightName = "limelight-old";
+  String LimelightName = "";
   /** Creates a new CoralStationAligment. */
   public Reef(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;
@@ -41,9 +52,9 @@ public class Reef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    hand.setWantedPosition(RobotContainer.wristIntakeRotation);
+    //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
-    LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1, 2, 12, 13}); // Only track these tag IDs
+    LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{8}); // Only track these tag IDs
   }
 
   // Called every time the scheduler runs while the command is scheduled.

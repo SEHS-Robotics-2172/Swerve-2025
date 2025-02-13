@@ -29,7 +29,7 @@ public class CoralStationAligment extends Command {
   Pose2d targetPosition;
   Pose2d wantedError = new Pose2d(0, -0.3, new Rotation2d(0));
   Transform2d error;
-  String LimelightName = "";
+  String LimelightName = "limelight-old";
   /** Creates a new CoralStationAligment. */
   public CoralStationAligment(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;

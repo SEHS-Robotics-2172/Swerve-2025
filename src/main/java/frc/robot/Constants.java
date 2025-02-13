@@ -47,7 +47,7 @@ public final class Constants {
             new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
 
         /* Module Gear Ratios */
-        public static final double driveGearRatio = chosenModule.driveGearRatio;
+        public static final double driveGearRatio = 6.72/2;
         public static final double angleGearRatio = 12.3; //chosenModule.angleGearRatio;
 
         /* Motor Inverts */

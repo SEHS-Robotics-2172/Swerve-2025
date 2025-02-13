@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +35,7 @@ public class RobotContainer {
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final Trigger reefButton = new JoystickButton(driver, XboxController.Button.kA.value);
     
     /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
@@ -78,7 +81,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        coralStation.onTrue(new Reef(s_Swerve, hand));
+        coralStation.onTrue(new CoralStationAligment(s_Swerve, hand));
+        reefButton.onTrue(new Reef(s_Swerve, hand));
 
         set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
 
@@ -105,8 +109,8 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
-    }
+    // public Command getAutonomousCommand() {
+    //     // An ExampleCommand will run in autonomous
+    //     return new exampleAuto(s_Swerve);
+    // }
 }

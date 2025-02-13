@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,7 +24,6 @@ import frc.robot.subsystems.Swerve;
  */
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
-
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
@@ -79,7 +80,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -98,6 +99,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -106,7 +108,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    System.out.println(LimelightHelpers.getTargetCount("limelight-old"));
+    //System.out.println(LimelightHelpers.getTargetCount("limelight-old"));
     LimelightHelpers.SetRobotOrientation("limelight-new", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
   }
 
