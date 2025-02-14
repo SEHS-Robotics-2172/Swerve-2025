@@ -4,45 +4,35 @@
 
 package frc.robot.commands;
 
-import java.util.List;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Reef extends Command {
+public class ReefRight extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.05, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.075, 0.001, 0.002);
   Hand hand;
   double strafeValue;
   double driveValue;
   double rotationValue;
   Swerve swerve;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(-0.1, -0.2, Rotation2d.fromDegrees(-7));
+  Pose2d wantedError = new Pose2d(0, -0.3, Rotation2d.fromDegrees(0));
   Transform2d error;
   String LimelightName = "";
-  /** Creates a new CoralStationAligment. */
-  public Reef(Swerve swerve_, Hand hand_) {
+  double timer;
+  boolean pid;
+  /** Creates a new Reef. */
+  public ReefRight(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;
     this.hand = hand_;
     addRequirements(swerve_, hand_);
@@ -52,6 +42,8 @@ public class Reef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    pid = true;
+    timer = 1;
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{8}); // Only track these tag IDs
@@ -60,27 +52,43 @@ public class Reef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+
+  if (pid){
     targetPosition = new Pose2d(
       -LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ(),
       Rotation2d.fromDegrees(LimelightHelpers.getTX(LimelightName))
       );
-      
-      error = (targetPosition.minus(wantedError));
-      
-      strafeValue = strafeController.calculate(error.getX());
-      driveValue = driveController.calculate(error.getY());
-      rotationValue = rotationController.calculate(error.getRotation().getDegrees());
-      swerve.drive(
-        new Translation2d(driveValue, strafeValue),
-        rotationValue,
-        false,
-        true
-        );
-        SmartDashboard.putNumber("X", error.getX());
-        SmartDashboard.putNumber("Y", error.getY());
-        SmartDashboard.putNumber("R", error.getRotation().getDegrees());
+    error = (targetPosition.minus(wantedError));
+    strafeValue = strafeController.calculate(error.getX());
+    driveValue = driveController.calculate(error.getY());
+    rotationValue = -rotationController.calculate(error.getRotation().getDegrees());
+    swerve.drive(
+      new Translation2d(driveValue, strafeValue),
+      rotationValue,
+      false,
+      true
+      );
   }
+
+
+  if (!pid){
+    timer -= Robot.kDefaultPeriod;
+    if(timer >= 0.25)
+      swerve.drive(new Translation2d(0, -0.27), 0, false, false);
+    else
+      swerve.drive(new Translation2d(1, 0), 0, false, false);
+  }
+  
+  // SmartDashboard.putNumber("X", error.getX());
+  // SmartDashboard.putNumber("Y", error.getY());
+  // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
+
+
+  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 0.5 )))
+    pid = false;
+}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -96,7 +104,7 @@ public class Reef extends Command {
   @Override
   public boolean isFinished() {
 
-    if ((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )){
+    if (timer <=0){
         return true;
     }
     else

@@ -1,14 +1,10 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -28,14 +24,15 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    public static final double wristScoreTRotation = 0.3;
-    public static final double wristIntakeRotation = 0.53;
+    public static final double wristScoreTRotation = 0.23;
+    public static final double wristIntakeRotation = 0.5;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final Trigger reefButton = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final Trigger reefLeftButton = new Trigger(() -> driver.getPOV() == 270);
+    private final Trigger reefRightButton = new Trigger(() -> driver.getPOV() == 90);
     
     /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
@@ -82,14 +79,15 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve, hand));
-        reefButton.onTrue(new Reef(s_Swerve, hand));
+        reefLeftButton.onTrue(new ReefLeft(s_Swerve, hand));
+        reefRightButton.onTrue(new ReefRight(s_Swerve, hand));
 
         set0.onTrue(new InstantCommand(() -> elevator.setWantedPosition(0)));
 
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(3.6);
+            elevator.setWantedPosition(3.8);
             hand.setWantedPosition(wristScoreTRotation);
         }));
 

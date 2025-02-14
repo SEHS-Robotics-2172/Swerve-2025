@@ -6,8 +6,6 @@ package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +24,7 @@ public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private Hand hand;
 
   private Elevator elevator;
 
@@ -42,7 +41,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    //hand = m_robotContainer.hand;
+    hand = m_robotContainer.hand;
     swerve = m_robotContainer.s_Swerve;
     elevator = m_robotContainer.elevator;
     co_driver =  m_robotContainer.co_driver;
@@ -99,7 +98,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
+    elevator.resetToAbsolute();
+    hand.resetToAbsolute();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -109,7 +109,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //System.out.println(LimelightHelpers.getTargetCount("limelight-old"));
-    LimelightHelpers.SetRobotOrientation("limelight-new", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-old", swerve.gyro.getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
   }
 
   @Override

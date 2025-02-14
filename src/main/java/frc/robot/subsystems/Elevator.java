@@ -29,8 +29,8 @@ public class Elevator extends SubsystemBase {
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     config.Feedback.SensorToMechanismRatio = 7.75 / 2;
-    config.Slot0.kI = 0.5;
-    config.Slot0.kP = 4;
+    config.Slot0.kI = 2;
+    config.Slot0.kP = 6;
     config.Slot0.kD = 0;
     config.Slot0.kV = 0;
     config.Slot0.kA = 0;
@@ -40,8 +40,6 @@ public class Elevator extends SubsystemBase {
     encoder = new SparkMax(Constants.Elevator.encoderID, MotorType.kBrushed);
     motor1.getConfigurator().apply(config);
     motor2.getConfigurator().apply(config);
-    motor1.setPosition(getRotations());
-    motor2.setPosition(getRotations());
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);
   }
@@ -66,5 +64,9 @@ public class Elevator extends SubsystemBase {
   }
   public void resetToZero(){
     encoder.getEncoder().setPosition(0);
+  }
+  public void resetToAbsolute(){
+    motor1.setPosition(getRotations());
+    motor2.setPosition(getRotations());
   }
 }
