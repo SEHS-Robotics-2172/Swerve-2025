@@ -46,7 +46,7 @@ public class ReefLeft extends Command {
     timer = 1;
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
-    LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{8}); // Only track these tag IDs
+    LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs
   }
 
   // Called every time the scheduler runs while the command is scheduled.

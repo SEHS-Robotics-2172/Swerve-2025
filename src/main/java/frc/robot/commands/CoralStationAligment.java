@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
@@ -20,14 +21,15 @@ import frc.robot.subsystems.Swerve;
 public class CoralStationAligment extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.05, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.12, 0.001, 0.002);
   Hand hand;
   double strafeValue;
   double driveValue;
   double rotationValue;
   Swerve swerve;
+  double timer;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(0, -0.3, new Rotation2d(0));
+  Pose2d wantedError = new Pose2d(0, -0.32, Rotation2d.fromDegrees(0));
   Transform2d error;
   String LimelightName = "limelight-old";
   /** Creates a new CoralStationAligment. */
@@ -41,6 +43,7 @@ public class CoralStationAligment extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer = 4;
     hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1, 2, 12, 13}); // Only track these tag IDs
@@ -49,6 +52,7 @@ public class CoralStationAligment extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    timer -= Robot.kDefaultPeriod;
     targetPosition = new Pose2d(
       -LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ(),
@@ -74,6 +78,7 @@ public class CoralStationAligment extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
     System.out.println("Ended");
     strafeController.reset();
     driveController.reset();
@@ -85,7 +90,7 @@ public class CoralStationAligment extends Command {
   @Override
   public boolean isFinished() {
 
-    if ((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )){
+    if ((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 0.1 ) || timer <= 0){
         return true;
     }
     else

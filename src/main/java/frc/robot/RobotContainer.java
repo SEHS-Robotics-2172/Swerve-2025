@@ -24,8 +24,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    public static final double wristScoreTRotation = 0.23;
-    public static final double wristIntakeRotation = 0.5;
+    public static final double wristScoreTRotation = 0.2;
+    public static final double wristIntakeRotation = 0.46;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -33,6 +33,7 @@ public class RobotContainer {
     private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final Trigger reefLeftButton = new Trigger(() -> driver.getPOV() == 270);
     private final Trigger reefRightButton = new Trigger(() -> driver.getPOV() == 90);
+    private final Trigger SlowDownButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     
     /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
@@ -76,6 +77,12 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        SlowDownButton.whileTrue(new InstantCommand(() -> {
+            hand.resetToAbsolute();
+            elevator.resetToAbsolute();
+        }));
+
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve, hand));
