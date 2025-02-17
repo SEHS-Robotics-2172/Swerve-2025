@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autos.move;
+import frc.robot.autos.moveKT;
 import frc.robot.commands.ReefLeft;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Hand;
@@ -134,7 +135,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
         m_autonomousCommand = new SequentialCommandGroup(
           new Command[]{
-            new move(swerve),
+            new moveKT(swerve),
             new InstantCommand(() -> hand.setWantedPosition(RobotContainer.wristScoreTRotation)),
             new ReefLeft(swerve, hand),
             new InstantCommand(() -> hand.setIntakeSpeed(-0.5))
