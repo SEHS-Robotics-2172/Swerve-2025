@@ -39,11 +39,11 @@ public class RobotContainer {
     
     /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
-    private final Trigger setLevelTwo = new Trigger(() -> (co_driver.getAButton()));
-    private final Trigger setLevelThree = new Trigger(() -> (co_driver.getBButton()));
-    private final Trigger setLevelFour = new Trigger(() -> (co_driver.getYButton()));
-    private final Trigger scorePosition = new Trigger(() -> (co_driver.getXButton()));
-    private final Trigger level4Score = new Trigger(() -> (co_driver.getLeftBumperButton()));
+    private final Trigger setLevelTwo = new Trigger(co_driver::getAButton);
+    private final Trigger setLevelThree = new Trigger(co_driver::getBButton);
+    private final Trigger setLevelFour = new Trigger(co_driver::getYButton);
+    private final Trigger scorePosition = new Trigger(co_driver::getXButton);
+    private final Trigger level4Score = new Trigger(co_driver::getLeftBumperButton);
    
 
     /* Subsystems */
