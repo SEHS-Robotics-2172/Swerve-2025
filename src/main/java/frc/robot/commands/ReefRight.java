@@ -75,7 +75,7 @@ public class ReefRight extends Command {
 
   if (!pid){
     timer -= Robot.kDefaultPeriod;
-    if(timer >= 0.25)
+    if(timer >= 0.15)
       swerve.drive(new Translation2d(0, -0.27), 0, false, false);
     else
       swerve.drive(new Translation2d(1, 0), 0, false, false);
@@ -86,7 +86,7 @@ public class ReefRight extends Command {
   // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
 
 
-  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 0.5 )))
+  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )))
     pid = false;
 }
 

@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     swerve = m_robotContainer.s_Swerve;
     elevator = m_robotContainer.elevator;
     co_driver =  m_robotContainer.co_driver;
+    hand.intakeMotor1.getAlternateEncoder().setPosition(0);
 
     m_chooser.setDefaultOption("Coral Left", kDefaultAuto);
     m_chooser.addOption("Shoot", kCustomAuto);
@@ -137,7 +138,7 @@ public class Robot extends TimedRobot {
             new move(swerve),
             new InstantCommand(() -> hand.setWantedPosition(RobotContainer.wristScoreTRotation)),
             new ReefLeft(swerve, hand),
-            new InstantCommand(() -> hand.setIntakeSpeed(-0.5))
+            new InstantCommand(() -> hand.setIntakeSpeed(-1))
           }
         );
       break;
@@ -166,7 +167,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     elevator.resetToAbsolute();
-    hand.resetToAbsolute();
+    // hand.resetToAbsolute();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

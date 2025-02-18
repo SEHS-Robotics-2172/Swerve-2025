@@ -7,6 +7,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -14,12 +16,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 //if (button==pressed){
 //boolean win = true;
 //}
 public class Hand extends SubsystemBase {
     private TalonFX wristMotor;
-    private SparkMax intakeMotor1;
+    public SparkMax intakeMotor1;
     public SparkMax intakeMotor2;
     public PositionVoltage handPID = new PositionVoltage(0);
     double wantedPosition = 0;
@@ -29,10 +32,10 @@ public class Hand extends SubsystemBase {
 
     public Hand(){
       wristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-      wristConfig.Slot0.kP = 20; 
-      wristConfig.Slot0.kI = 3;
+      wristConfig.Slot0.kP = 25; 
+      wristConfig.Slot0.kI = 5;
       wristConfig.Slot0.kG = 0.1;
-      wristConfig.Feedback.SensorToMechanismRatio = 9.2;
+      wristConfig.Feedback.SensorToMechanismRatio = 10;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
       intakeCCW.inverted(true);
@@ -45,18 +48,22 @@ public class Hand extends SubsystemBase {
       wristMotor = new TalonFX(Constants.Hand.wristMotorID);
       intakeMotor1 = new SparkMax(Constants.Hand.intakeMotor1ID, MotorType.kBrushless);
       intakeMotor2 = new SparkMax(Constants.Hand.intakeMotor2ID, MotorType.kBrushless);
+
+      intakeMotor1.configure(intakeCCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+      intakeMotor2.configure(intakeCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
       
       wristMotor.getConfigurator().apply(wristConfig);
+      wristMotor.setPosition(0);
     }
  @Override
   public void periodic() {
-    SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
-    SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Wanted Wrist Position", wantedPosition); 
+    // SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
+    // SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
+    // SmartDashboard.putNumber("Wanted Wrist Position", wantedPosition); 
     wristMotor.setControl(handPID.withPosition(wantedPosition));
   }
   public double getEncoderPosition(){
-    return intakeMotor2.getAlternateEncoder().getPosition();
+    return intakeMotor1.getAlternateEncoder().getPosition();
   }
   public void resetToAbsolute(){
     double absolutePosition = getEncoderPosition();
@@ -64,6 +71,9 @@ public class Hand extends SubsystemBase {
 }
   public void setWantedPosition(double rotations){
     wantedPosition = rotations;
+  }
+  public void addWantedPosition(double speed){
+    wantedPosition += Robot.kDefaultPeriod * 0.25 * speed;
   }
   public void setIntakeSpeed(double speed){
     intakeMotor1.set(speed);

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,10 +15,14 @@ public class intakeSpeed extends Command {
   /** Creates a new intakeSpeed. */
   Hand hand;
   DoubleSupplier speed;
-  public intakeSpeed(Hand hand_, DoubleSupplier speed_) {
+  BooleanSupplier up;
+  BooleanSupplier down;
+  public intakeSpeed(Hand hand_, DoubleSupplier speed_, BooleanSupplier up, BooleanSupplier down) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.speed = speed_;
     this.hand = hand_;
+    this.down = down;
+    this.up = up;
     addRequirements(hand_);
   }
 
@@ -26,6 +31,12 @@ public class intakeSpeed extends Command {
   public void execute() {
     double speedAsDouble = speed.getAsDouble();
     hand.setIntakeSpeed(speedAsDouble);
+    if(up.getAsBoolean()){
+      hand.addWantedPosition(1);
+    }
+    if (down.getAsBoolean()){
+      hand.addWantedPosition(-1);
+    }
   }
 
   // Called once the command ends or is interrupted.

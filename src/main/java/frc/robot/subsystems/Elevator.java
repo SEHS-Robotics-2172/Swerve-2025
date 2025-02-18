@@ -49,9 +49,9 @@ public class Elevator extends SubsystemBase {
     PositionVoltage speed = elevatorPID.withPosition(wantedPosition);
     motor1.setControl(speed);
     motor2.setControl(speed);
-    SmartDashboard.putNumber("Elevator Absolute Position", getRotations()); 
-    SmartDashboard.putNumber("Elevator Position", motor1.getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Elevator Wanted Position", wantedPosition); 
+    // SmartDashboard.putNumber("Elevator Absolute Position", getRotations()); 
+    // SmartDashboard.putNumber("Elevator Position", motor1.getPosition().getValueAsDouble());
+    // SmartDashboard.putNumber("Elevator Wanted Position", wantedPosition); 
   }
   public void addWantedPosition(double rotations){
     wantedPosition += (rotations * 0.02);

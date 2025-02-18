@@ -26,8 +26,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    public static final double wristScoreTRotation = 0.2;
-    public static final double wristIntakeRotation = 0.46;
+    public static final double wristScoreTRotation = 0.36;
+    public static final double wristIntakeRotation = 0.61;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -55,7 +55,10 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         hand.setDefaultCommand(new intakeSpeed(
-            hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis())
+            hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis()),
+            () -> co_driver.getPOV() == 0,
+            () -> co_driver.getPOV() == 180
+
             )
         );
         s_Swerve.setDefaultCommand(
@@ -81,7 +84,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         SlowDownButton.whileTrue(new InstantCommand(() -> {
-            hand.resetToAbsolute();
+            // hand.resetToAbsolute();
             elevator.resetToAbsolute();
         }));
 
@@ -102,7 +105,7 @@ public class RobotContainer {
 
         setLevelFour.onTrue(new InstantCommand(() -> {
             elevator.setWantedPosition(8.3);
-            hand.setWantedPosition(wristScoreTRotation);
+            hand.setWantedPosition(0.3);
         }));
 
         scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation)));
