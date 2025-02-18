@@ -47,11 +47,15 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (wantedPosition - motor1.getPosition().getValueAsDouble() <= 0){
+    double error = wantedPosition - motor1.getPosition().getValueAsDouble();
+    if (error <= 0){
       elevatorController.setPID(kP/2, kI/2, kD);
     } else {
       elevatorController.setPID(kP, kI, kD);
     }
+    double speed = elevatorController.calculate(error);
+    motor1.setVoltage(speed);
+    motor2.setVoltage(speed);
     // SmartDashboard.putNumber("Elevator Absolute Position", getRotations()); 
     // SmartDashboard.putNumber("Elevator Position", motor1.getPosition().getValueAsDouble());
     // SmartDashboard.putNumber("Elevator Wanted Position", wantedPosition); 
