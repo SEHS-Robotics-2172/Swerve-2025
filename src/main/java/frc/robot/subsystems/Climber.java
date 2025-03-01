@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -33,23 +34,27 @@ public class Climber extends SubsystemBase {
     climbMotor = new SparkMax(Constants.Climber.climbMotorID, MotorType.kBrushless);
     climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     climb.inverted(false);
-    
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double error = wantedPosition - getEncoder();
+    double error = wantedPosition - getEncoderPosition();
     double speed = pidClimb.calculate(error);
     climbMotor.setVoltage(speed);
 
   }
+
   public void setPosition(double position) {
     wantedPosition = position;
   }
 
-  public double getEncoder() {
+  public void addWantedPosition(double speed){
+    wantedPosition += Robot.kDefaultPeriod * 0.25 * speed;
+  }
+
+  public double getEncoderPosition() {
     // encoder nonsense
     return climbMotor.getAlternateEncoder().getPosition();
   

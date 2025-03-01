@@ -50,6 +50,7 @@ public class RobotContainer {
     public Hand hand = new Hand();
     public final Swerve s_Swerve = new Swerve();
     public final Elevator elevator = new Elevator();
+    public final Climber climber = new Climber();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
