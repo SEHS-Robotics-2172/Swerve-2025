@@ -26,7 +26,9 @@ public final class Constants {
         public static final int intakeMotor1ID = 32;
         public static final int intakeMotor2ID = 33;
     }
-
+    public static final class Climber{
+        public static final int climbMotorID = -1;
+    }
     public static final class Swerve {
         public static final int pigeonID = 40;
 
