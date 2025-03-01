@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.security.CodeSigner;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,8 +20,8 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    public final XboxController driver = new XboxController(1);
-    public final XboxController co_driver = new XboxController(2);
+    public final XboxController driver = new XboxController(0);
+    public final XboxController co_driver = new XboxController(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -44,7 +46,8 @@ public class RobotContainer {
     private final Trigger setLevelFour = new Trigger(co_driver::getYButton);
     private final Trigger scorePosition = new Trigger(co_driver::getXButton);
     private final Trigger level4Score = new Trigger(co_driver::getLeftBumperButton);
-   
+    private final Trigger climberup = new Trigger(co_driver::getLeftStickButton);
+    private final Trigger climberdown = new Trigger(co_driver::getRightStickButton);
 
     /* Subsystems */
     public Hand hand = new Hand();
@@ -112,7 +115,10 @@ public class RobotContainer {
         scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation)));
 
         level4Score.onTrue(new level4(hand));
-
+      
+        climberup.onTrue(new InstantCommand(() -> climber.setPosition(-0.5)));
+        
+        climberdown.onTrue(new InstantCommand(() -> climber.setPosition(0)));
     }
 
     /**
