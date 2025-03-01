@@ -30,8 +30,8 @@ public class Elevator extends SubsystemBase {
   double wantedPosition = 0;
   TalonFXConfiguration config = new TalonFXConfiguration(); 
   public Elevator() {
-    kP = 0.2;
-    kI = 0.2;
+    kP = 5;
+    kI = 0.1;
     kD = 0;
     elevatorController = new PIDController(kP, kI, kD);
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -47,18 +47,20 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double error = wantedPosition - motor1.getPosition().getValueAsDouble();
-    if (error <= 0){
-      elevatorController.setPID(kP/2, kI/2, kD);
+    double error = motor1.getPosition().getValueAsDouble() - wantedPosition;
+    if (error >= 0){
+      elevatorController.setPID(kP/5, kI/5, kD);
     } else {
       elevatorController.setPID(kP, kI, kD);
     }
     double speed = elevatorController.calculate(error);
     motor1.setVoltage(speed);
     motor2.setVoltage(speed);
-    // SmartDashboard.putNumber("Elevator Absolute Position", getRotations()); 
-    // SmartDashboard.putNumber("Elevator Position", motor1.getPosition().getValueAsDouble());
-    // SmartDashboard.putNumber("Elevator Wanted Position", wantedPosition); 
+    SmartDashboard.putNumber("Elevator Absolute Position", getRotations()); 
+    SmartDashboard.putNumber("Elevator Position", motor1.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Elevator Wanted Position", wantedPosition); // /
+    SmartDashboard.putNumber("Speedy", speed);
+    SmartDashboard.putNumber("Error", error);
   }
   public void addWantedPosition(double rotations){
     wantedPosition += (rotations * 0.02);

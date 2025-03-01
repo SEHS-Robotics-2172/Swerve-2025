@@ -104,7 +104,7 @@ public class RobotContainer {
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(8.3);
+            elevator.setWantedPosition(10.3);
             hand.setWantedPosition(0.3);
         }));
 
