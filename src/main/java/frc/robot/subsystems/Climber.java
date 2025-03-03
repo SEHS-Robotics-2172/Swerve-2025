@@ -5,16 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -25,7 +20,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private SparkMax climbMotor;
-  private PIDController pidClimb = new PIDController(0, 0, 0);
+  private PIDController pidClimb = new PIDController(1, 0.1, 0);
   public double wantedPosition = 0;
 
   SparkMaxConfig climb = new SparkMaxConfig();
@@ -34,6 +29,7 @@ public class Climber extends SubsystemBase {
     climbMotor = new SparkMax(Constants.Climber.climbMotorID, MotorType.kBrushless);
     climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     climb.inverted(false);
+    climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
 
@@ -43,6 +39,11 @@ public class Climber extends SubsystemBase {
     double error = wantedPosition - getEncoderPosition();
     double speed = pidClimb.calculate(error);
     climbMotor.setVoltage(speed);
+
+    SmartDashboard.putNumber("Climber Absolute Position", getEncoderPosition()); 
+    SmartDashboard.putNumber("Climber Wanted Position", wantedPosition);
+    SmartDashboard.putNumber("Climber Speedy", speed);
+    SmartDashboard.putNumber("Climber Error", error);
 
   }
 
@@ -57,6 +58,7 @@ public class Climber extends SubsystemBase {
   public double getEncoderPosition() {
     // encoder nonsense
     return climbMotor.getAlternateEncoder().getPosition();
-  
   }
+  
 }
+ 
