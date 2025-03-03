@@ -116,9 +116,14 @@ public class RobotContainer {
 
         level4Score.onTrue(new level4(hand));
       
-        climberup.onTrue(new InstantCommand(() -> climber.setPosition(-0.5)));
+        climberup.onTrue(new InstantCommand(() -> {
+            climber.addWantedPosition(0.1);
+        }));
         
-        climberdown.onTrue(new InstantCommand(() -> climber.setPosition(0)));
+        climberdown.onTrue(new InstantCommand(() -> {
+            climber.addWantedPosition(-0.1); 
+        }));
+
     }
 
     /**
