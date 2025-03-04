@@ -1,14 +1,15 @@
 package frc.robot;
 
-import java.security.CodeSigner;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.exampleAuto;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -19,6 +20,7 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private final SendableChooser<Command> autochooser;
     /* Controllers */
     public final XboxController driver = new XboxController(0);
     public final XboxController co_driver = new XboxController(1);
@@ -58,6 +60,9 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        autochooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autochooser);
+
         hand.setDefaultCommand(new intakeSpeed(
             hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis()),
             () -> co_driver.getPOV() == 0,
@@ -133,6 +138,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return null;
+        return autochooser.getSelected();
     }
 }
