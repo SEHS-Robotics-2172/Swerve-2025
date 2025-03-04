@@ -62,10 +62,11 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        autochooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autochooser);
         NamedCommands.registerCommand("ReefLeft", new ReefLeft(s_Swerve, hand));
         NamedCommands.registerCommand("ReefRight", new ReefRight(s_Swerve, hand));
+        autochooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autochooser);
+       
 
         hand.setDefaultCommand(new intakeSpeed(
             hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis()),
@@ -131,7 +132,7 @@ public class RobotContainer {
         
         climberdown.whileTrue(new InstantCommand(() -> {
             climber.setPosition(0); 
-            System.out.println("up");
+            System.out.println("down");
         }));
 
     }

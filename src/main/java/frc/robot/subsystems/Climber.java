@@ -29,6 +29,7 @@ public class Climber extends SubsystemBase {
     climbMotor = new SparkMax(Constants.Climber.climbMotorID, MotorType.kBrushless);
     climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     climb.inverted(false);
+    climb.idleMode(IdleMode.kBrake);
     climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
