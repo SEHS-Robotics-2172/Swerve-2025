@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -55,7 +56,7 @@ public class Robot extends TimedRobot {
     //  robot.fix();
     //  robot.work();
     //}
-
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   /**

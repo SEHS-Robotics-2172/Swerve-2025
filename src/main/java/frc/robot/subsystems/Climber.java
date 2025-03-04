@@ -20,7 +20,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private SparkMax climbMotor;
-  private PIDController pidClimb = new PIDController(1, 0.1, 0);
+  private PIDController pidClimb = new PIDController(10, 0, 0);
   public double wantedPosition = 0;
 
   SparkMaxConfig climb = new SparkMaxConfig();
@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double error = wantedPosition - getEncoderPosition();
-    double speed = pidClimb.calculate(error);
+    double speed = -pidClimb.calculate(error);
     climbMotor.setVoltage(speed);
 
     SmartDashboard.putNumber("Climber Absolute Position", getEncoderPosition()); 

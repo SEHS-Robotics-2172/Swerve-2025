@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -48,8 +49,8 @@ public class RobotContainer {
     private final Trigger setLevelFour = new Trigger(co_driver::getYButton);
     private final Trigger scorePosition = new Trigger(co_driver::getXButton);
     private final Trigger level4Score = new Trigger(co_driver::getLeftBumperButton);
-    private final Trigger climberup = new Trigger(co_driver::getLeftStickButton);
-    private final Trigger climberdown = new Trigger(co_driver::getRightStickButton);
+    private final Trigger climberup = new Trigger(driver::getAButton);
+    private final Trigger climberdown = new Trigger(driver::getBButton);
 
     /* Subsystems */
     public Hand hand = new Hand();
@@ -57,11 +58,14 @@ public class RobotContainer {
     public final Elevator elevator = new Elevator();
     public final Climber climber = new Climber();
 
+    
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         autochooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autochooser);
+        NamedCommands.registerCommand("ReefLeft", new ReefLeft(s_Swerve, hand));
+        NamedCommands.registerCommand("ReefRight", new ReefRight(s_Swerve, hand));
 
         hand.setDefaultCommand(new intakeSpeed(
             hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis()),
@@ -79,7 +83,6 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
-
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -121,12 +124,14 @@ public class RobotContainer {
 
         level4Score.onTrue(new level4(hand));
       
-        climberup.onTrue(new InstantCommand(() -> {
-            climber.addWantedPosition(0.1);
+        climberup.whileTrue(new InstantCommand(() -> {
+            climber.setPosition(6.22);
+            System.out.println("up");
         }));
         
-        climberdown.onTrue(new InstantCommand(() -> {
-            climber.addWantedPosition(-0.1); 
+        climberdown.whileTrue(new InstantCommand(() -> {
+            climber.setPosition(0); 
+            System.out.println("up");
         }));
 
     }
