@@ -1,8 +1,16 @@
 package frc.robot;
 
+import java.util.List;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -57,16 +65,32 @@ public class RobotContainer {
     public final Swerve s_Swerve = new Swerve();
     public final Elevator elevator = new Elevator();
     public final Climber climber = new Climber();
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+        new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
+        new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0))
+    );
+    PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0);
+    PathPlannerPath path = new PathPlannerPath(
+        waypoints,
+        constraints,
+     null,
+      new GoalEndState(0.0, Rotation2d.kZero));
+
+      public Command commandFromPath(PathPlannerPath path){
+        return AutoBuilder.followPath(path);
+      }
 
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        path.preventFlipping = true;
         NamedCommands.registerCommand("ReefLeft", new ReefLeft(s_Swerve, hand));
         NamedCommands.registerCommand("ReefRight", new ReefRight(s_Swerve, hand));
+        NamedCommands.registerCommand("Shoot", new shoot(hand));
         autochooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autochooser);
-       
+        
 
         hand.setDefaultCommand(new intakeSpeed(
             hand, () -> (co_driver.getLeftTriggerAxis()-co_driver.getRightTriggerAxis()),
@@ -126,7 +150,7 @@ public class RobotContainer {
         level4Score.onTrue(new level4(hand));
       
         climberup.whileTrue(new InstantCommand(() -> {
-            climber.setPosition(6.22);
+            climber.setPosition(6.52);
             System.out.println("up");
         }));
         

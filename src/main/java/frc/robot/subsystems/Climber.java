@@ -20,7 +20,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private SparkMax climbMotor;
-  private PIDController pidClimb = new PIDController(10, 0, 0);
+  private PIDController pidClimb = new PIDController(20, 0, 0);
   public double wantedPosition = 0;
 
   SparkMaxConfig climb = new SparkMaxConfig();
@@ -31,6 +31,7 @@ public class Climber extends SubsystemBase {
     climb.inverted(false);
     climb.idleMode(IdleMode.kBrake);
     climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    climbMotor.getAlternateEncoder().setPosition(6.22);
   }
 
 
