@@ -25,6 +25,7 @@ public final class Constants {
         public static final int wristMotorID = 31;
         public static final int intakeMotor1ID = 32;
         public static final int intakeMotor2ID = 33;
+        public static final int wristEncoderID = 27;
     }
     public static final class Climber{
         public static final int climbMotorID = 42;

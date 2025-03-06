@@ -56,7 +56,7 @@ public class ReefLeft extends Command {
 
   if (pid){
     targetPosition = new Pose2d(
-      -LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
+      LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ(),
       Rotation2d.fromDegrees(LimelightHelpers.getTX(LimelightName))
       );

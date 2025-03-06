@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -27,8 +29,10 @@ public class Hand extends SubsystemBase {
     public PositionVoltage handPID = new PositionVoltage(0);
     double wantedPosition = 0;
     TalonFXConfiguration wristConfig = new TalonFXConfiguration();
+    CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     SparkMaxConfig intakeCCW = new SparkMaxConfig();
-    SparkMaxConfig intakeCW = new SparkMaxConfig();
+    SparkMaxConfig intakeCW = new SparkMaxConfig(); 
+    CANcoder encoder;
 
     public Hand(){
       wristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
@@ -48,22 +52,23 @@ public class Hand extends SubsystemBase {
       wristMotor = new TalonFX(Constants.Hand.wristMotorID);
       intakeMotor1 = new SparkMax(Constants.Hand.intakeMotor1ID, MotorType.kBrushless);
       intakeMotor2 = new SparkMax(Constants.Hand.intakeMotor2ID, MotorType.kBrushless);
+      encoder = new CANcoder(Constants.Hand.wristEncoderID);
 
       intakeMotor1.configure(intakeCCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
       intakeMotor2.configure(intakeCW, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
       
       wristMotor.getConfigurator().apply(wristConfig);
       wristMotor.setPosition(0);
+      resetToAbsolute();
     }
  @Override
   public void periodic() {
-    // SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
-    // SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
-    // SmartDashboard.putNumber("Wanted Wrist Position", wantedPosition); 
+    SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
+    SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
     wristMotor.setControl(handPID.withPosition(wantedPosition));
   }
   public double getEncoderPosition(){
-    return intakeMotor1.getAlternateEncoder().getPosition();
+    return encoder.getAbsolutePosition().getValueAsDouble() * 2;
   }
   public void resetToAbsolute(){
     double absolutePosition = getEncoderPosition();

@@ -55,7 +55,7 @@ public class RobotContainer {
     private final Trigger setLevelTwo = new Trigger(co_driver::getAButton);
     private final Trigger setLevelThree = new Trigger(co_driver::getBButton);
     private final Trigger setLevelFour = new Trigger(co_driver::getYButton);
-    private final Trigger scorePosition = new Trigger(co_driver::getXButton);
+    private final Trigger intakePosition = new Trigger(co_driver::getXButton);
     private final Trigger level4Score = new Trigger(co_driver::getLeftBumperButton);
     private final Trigger climberup = new Trigger(driver::getAButton);
     private final Trigger climberdown = new Trigger(driver::getBButton);
@@ -65,6 +65,9 @@ public class RobotContainer {
     public final Swerve s_Swerve = new Swerve();
     public final Elevator elevator = new Elevator();
     public final Climber climber = new Climber();
+
+    public final InstantCommand intakePositionCommand = new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation));
+
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
         new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
         new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0))
@@ -88,6 +91,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ReefLeft", new ReefLeft(s_Swerve, hand));
         NamedCommands.registerCommand("ReefRight", new ReefRight(s_Swerve, hand));
         NamedCommands.registerCommand("Shoot", new shoot(hand));
+        NamedCommands.registerCommand("IntakePos", intakePositionCommand);
         autochooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autochooser);
         
@@ -145,7 +149,7 @@ public class RobotContainer {
             hand.setWantedPosition(0.3);
         }));
 
-        scorePosition.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation)));
+        intakePosition.onTrue(intakePositionCommand);
 
         level4Score.onTrue(new level4(hand));
       

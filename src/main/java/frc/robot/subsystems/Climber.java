@@ -31,7 +31,7 @@ public class Climber extends SubsystemBase {
     climb.inverted(false);
     climb.idleMode(IdleMode.kBrake);
     climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    climbMotor.getAlternateEncoder().setPosition(6.22);
+    // climbMotor.getAlternateEncoder().setPosition(0);
   }
 
 

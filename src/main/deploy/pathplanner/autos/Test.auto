@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New New Path"
+            "pathName": "Loopy Thingy"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "ReefLeft"
           }
         }
       ]

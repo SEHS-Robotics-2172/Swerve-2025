@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Start to Reef"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ReefLeft"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef to intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakePos"
           }
         }
       ]
