@@ -56,14 +56,14 @@ public class ReefLeft extends Command {
 
   if (pid){
     targetPosition = new Pose2d(
-      LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
+      -LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ(),
       Rotation2d.fromDegrees(LimelightHelpers.getTX(LimelightName))
       );
     error = (targetPosition.minus(wantedError));
     strafeValue = strafeController.calculate(error.getX());
     driveValue = driveController.calculate(error.getY());
-    rotationValue = -rotationController.calculate(error.getRotation().getDegrees());
+    rotationValue = rotationController.calculate(error.getRotation().getDegrees());
     swerve.drive(
       new Translation2d(driveValue, strafeValue),
       rotationValue,

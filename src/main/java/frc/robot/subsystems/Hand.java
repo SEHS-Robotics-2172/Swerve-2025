@@ -36,8 +36,9 @@ public class Hand extends SubsystemBase {
 
     public Hand(){
       wristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-      wristConfig.Slot0.kP = 25; 
-      wristConfig.Slot0.kI = 5;
+      wristConfig.Slot0.kP = 50; 
+      wristConfig.Slot0.kI = 0;
+      wristConfig.Slot0.kD = 1;
       wristConfig.Slot0.kG = 0.1;
       wristConfig.Feedback.SensorToMechanismRatio = 10;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
