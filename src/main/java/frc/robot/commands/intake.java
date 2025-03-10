@@ -9,11 +9,11 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Hand;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class shoot extends Command {
+public class intake extends Command {
   Hand newHand;
   double timer;
   /** Creates a new shoot. */
-  public shoot(Hand newHand) {
+  public intake(Hand newHand) {
     this.newHand = newHand;
     addRequirements(newHand);
 
@@ -30,7 +30,7 @@ public class shoot extends Command {
   @Override
   public void execute() {
     timer += Robot.kDefaultPeriod;
-    newHand.setIntakeSpeed(-.5);
+    newHand.setIntakeSpeed(.5);
   }
 
   // Called once the command ends or is interrupted.
