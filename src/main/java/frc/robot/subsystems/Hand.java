@@ -36,9 +36,10 @@ public class Hand extends SubsystemBase {
     CANcoder encoder;
 
     public Hand(){
-      handController = new PIDController(0, 0, 0);
+      handController = new PIDController(10, 5, 0);
       wristConfig.Feedback.SensorToMechanismRatio = 10;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+      encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.8;
 
       intakeCCW.inverted(true);
       intakeCW.inverted(false);
@@ -57,17 +58,19 @@ public class Hand extends SubsystemBase {
       
       wristMotor.getConfigurator().apply(wristConfig);
       wristMotor.setPosition(0);
+      encoderConfig.MagnetSensor.MagnetOffset = 0.105713;
+      encoder.getConfigurator().apply(encoderConfig);
       resetToAbsolute();
     }
  @Override
   public void periodic() {
-    double error = wristMotor.getPosition().getValueAsDouble() - wantedPosition;
+    double error = getEncoderPosition() - wantedPosition;
     SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
     SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
     wristMotor.setVoltage(handController.calculate(error));
   }
   public double getEncoderPosition(){
-    return encoder.getAbsolutePosition().getValueAsDouble() * 2;
+    return encoder.getAbsolutePosition().getValueAsDouble();
   }
   public void resetToAbsolute(){
     double absolutePosition = getEncoderPosition();

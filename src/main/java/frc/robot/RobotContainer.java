@@ -39,8 +39,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    public static final double wristScoreTRotation = 0.315;
-    public static final double wristIntakeRotation = 0.6;
+    public static final double wristScoreTRotation = 0.15;
+    public static final double wristIntakeRotation = 0.292;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -79,7 +79,7 @@ public class RobotContainer {
      null,
       new GoalEndState(0.0, Rotation2d.kZero));
 
-      public Command commandFromPath(PathPlannerPath path){
+      public static Command commandFromPath(PathPlannerPath path){
         return AutoBuilder.followPath(path);
       }
 
@@ -140,13 +140,13 @@ public class RobotContainer {
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(3.8);
+            elevator.setWantedPosition(4.2);
             hand.setWantedPosition(wristScoreTRotation);
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
             elevator.setWantedPosition(10.3);
-            hand.setWantedPosition(0.3);
+            hand.setWantedPosition(0.15);
         }));
 
         intakePosition.onTrue(intakePositionCommand);
