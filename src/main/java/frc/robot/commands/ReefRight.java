@@ -31,6 +31,7 @@ public class ReefRight extends Command {
   String LimelightName = "";
   double timer;
   boolean pid;
+  double endTimer;
   /** Creates a new Reef. */
   public ReefRight(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;
@@ -44,6 +45,7 @@ public class ReefRight extends Command {
   public void initialize() {
     pid = true;
     timer = 1;
+    endTimer = 4;
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs
@@ -52,7 +54,7 @@ public class ReefRight extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    endTimer -= Robot.kDefaultPeriod;
 
   if (pid){
     targetPosition = new Pose2d(
@@ -76,9 +78,9 @@ public class ReefRight extends Command {
   if (!pid){
     timer -= Robot.kDefaultPeriod;
     if(timer >= 0.15)
-      swerve.drive(new Translation2d(0, -0.27), 0, false, false);
+      swerve.drive(new Translation2d(0, -0.26), 0, false, true);
     else
-      swerve.drive(new Translation2d(1, 0), 0, false, false);
+      swerve.drive(new Translation2d(1, 0), 0, false, true);
   }
   
   // SmartDashboard.putNumber("X", error.getX());
@@ -104,7 +106,7 @@ public class ReefRight extends Command {
   @Override
   public boolean isFinished() {
 
-    if (timer <=0){
+    if (timer <= 0 || endTimer <= 0){
         return true;
     }
     else
