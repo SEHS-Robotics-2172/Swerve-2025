@@ -19,7 +19,7 @@ import frc.robot.subsystems.Swerve;
 public class ReefLeft extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.075, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.075, 0.01, 0.002);
   Hand hand;
   double strafeValue;
   double driveValue;
@@ -88,7 +88,7 @@ public class ReefLeft extends Command {
   // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
 
 
-  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )))
+  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 0.5 )))
     pid = false;
 }
 

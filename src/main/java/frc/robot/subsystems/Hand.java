@@ -15,6 +15,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,7 +27,7 @@ public class Hand extends SubsystemBase {
     private TalonFX wristMotor;
     public SparkMax intakeMotor1;
     public SparkMax intakeMotor2;
-    public PositionVoltage handPID = new PositionVoltage(0);
+    public PIDController handController;
     double wantedPosition = 0;
     TalonFXConfiguration wristConfig = new TalonFXConfiguration();
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
@@ -35,13 +36,10 @@ public class Hand extends SubsystemBase {
     CANcoder encoder;
 
     public Hand(){
-      wristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-      wristConfig.Slot0.kP = 50; 
-      wristConfig.Slot0.kI = 0;
-      wristConfig.Slot0.kD = 1;
-      wristConfig.Slot0.kG = 0.1;
+      handController = new PIDController(10, 5, 0);
       wristConfig.Feedback.SensorToMechanismRatio = 10;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+      encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.8;
 
       intakeCCW.inverted(true);
       intakeCW.inverted(false);
@@ -60,16 +58,19 @@ public class Hand extends SubsystemBase {
       
       wristMotor.getConfigurator().apply(wristConfig);
       wristMotor.setPosition(0);
+      encoderConfig.MagnetSensor.MagnetOffset = 0.105713;
+      encoder.getConfigurator().apply(encoderConfig);
       resetToAbsolute();
     }
  @Override
   public void periodic() {
+    double error = getEncoderPosition() - wantedPosition;
     SmartDashboard.putNumber("Wrist Position", getEncoderPosition()); 
     SmartDashboard.putNumber("Kraken stupidity", wristMotor.getPosition().getValueAsDouble());
-    wristMotor.setControl(handPID.withPosition(wantedPosition));
+    wristMotor.setVoltage(handController.calculate(error));
   }
   public double getEncoderPosition(){
-    return encoder.getAbsolutePosition().getValueAsDouble() * 2;
+    return encoder.getAbsolutePosition().getValueAsDouble();
   }
   public void resetToAbsolute(){
     double absolutePosition = getEncoderPosition();

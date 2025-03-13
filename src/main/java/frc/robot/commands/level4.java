@@ -12,7 +12,7 @@ import frc.robot.subsystems.Hand;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class level4 extends Command {
   Hand hand;
-  double endTime = 2;
+  double endTime = 1;
   double timer;
   /** Creates a new level4. */
   public level4(Hand hand_) {
@@ -31,8 +31,8 @@ public class level4 extends Command {
   @Override
   public void execute() {
     timer += Robot.kDefaultPeriod;
-    hand.setIntakeSpeed(-0.5);
-    if (timer >= 1){
+    hand.setIntakeSpeed(-0.25);
+    if (timer >= 0.5){
       hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     }
   }

@@ -36,7 +36,7 @@ public class CoralStationAligment extends Command {
   public CoralStationAligment(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;
     this.hand = hand_;
-    addRequirements(swerve_, hand_);
+    addRequirements(swerve_);
     System.out.println("Initialized");
   }
 

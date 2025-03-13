@@ -39,8 +39,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    public static final double wristScoreTRotation = 0.32;
-    public static final double wristIntakeRotation = 0.57;
+    public static final double wristScoreTRotation = 0.15;
+    public static final double wristIntakeRotation = 0.292;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -49,6 +49,8 @@ public class RobotContainer {
     private final Trigger reefLeftButton = new Trigger(() -> driver.getPOV() == 270);
     private final Trigger reefRightButton = new Trigger(() -> driver.getPOV() == 90);
     private final Trigger SlowDownButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final Trigger climberup = new Trigger(driver::getAButton);
+    private final Trigger climberdown = new Trigger(driver::getBButton);
     
     /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
@@ -57,9 +59,7 @@ public class RobotContainer {
     private final Trigger setLevelFour = new Trigger(co_driver::getYButton);
     private final Trigger intakePosition = new Trigger(co_driver::getXButton);
     private final Trigger level4Score = new Trigger(co_driver::getLeftBumperButton);
-    private final Trigger climberup = new Trigger(driver::getAButton);
-    private final Trigger climberdown = new Trigger(driver::getBButton);
-
+   
     /* Subsystems */
     public Hand hand = new Hand();
     public final Swerve s_Swerve = new Swerve();
@@ -79,7 +79,7 @@ public class RobotContainer {
      null,
       new GoalEndState(0.0, Rotation2d.kZero));
 
-      public Command commandFromPath(PathPlannerPath path){
+      public static Command commandFromPath(PathPlannerPath path){
         return AutoBuilder.followPath(path);
       }
 
@@ -140,13 +140,13 @@ public class RobotContainer {
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(4.1);
+            elevator.setWantedPosition(4.2);
             hand.setWantedPosition(wristScoreTRotation);
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
             elevator.setWantedPosition(10.3);
-            hand.setWantedPosition(0.3);
+            hand.setWantedPosition(0.15);
         }));
 
         intakePosition.onTrue(intakePositionCommand);
