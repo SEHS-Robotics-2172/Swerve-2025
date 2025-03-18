@@ -92,6 +92,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ReefRight", new ReefRight(s_Swerve, hand));
         NamedCommands.registerCommand("Shoot", new shoot(hand));
         NamedCommands.registerCommand("IntakePos", intakePositionCommand);
+        NamedCommands.registerCommand("ScorePosition", new scorePosition(hand));
         autochooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autochooser);
         
