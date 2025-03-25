@@ -12,6 +12,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
+import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.LimelightHelpers.LimelightTarget_Detector;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
@@ -43,6 +46,7 @@ public class ReefLeft extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0.2, 0, 0);
     pid = true;
     timer = 1;
     endTimer = 4;
@@ -77,10 +81,7 @@ public class ReefLeft extends Command {
 
   if (!pid){
     timer -= Robot.kDefaultPeriod;
-    if(timer >= 0.15)
-      swerve.drive(new Translation2d(0, 0.26), 0, false, true);
-    else
-      swerve.drive(new Translation2d(1, 0), 0, false, true);
+    swerve.drive(new Translation2d(0, 0.26), 0, false, true);
   }
   
   // SmartDashboard.putNumber("X", error.getX());
@@ -99,6 +100,7 @@ public class ReefLeft extends Command {
     strafeController.reset();
     driveController.reset();
     rotationController.reset();
+    LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0, 0, 0);
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22});
   }
 
