@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom - Bottom Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Level 4 Elevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Level 4 Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Zero"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Right - Coral Station"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

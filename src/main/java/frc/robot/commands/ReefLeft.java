@@ -88,7 +88,7 @@ public class ReefLeft extends Command {
   // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
 
 
-  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 0.5 )))
+  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 0.5 )) || endTimer <= 0)
     pid = false;
 }
 
@@ -106,7 +106,7 @@ public class ReefLeft extends Command {
   @Override
   public boolean isFinished() {
 
-    if (timer <= 0 || endTimer <= 0){
+    if (timer <= 0){
         return true;
     }
     else

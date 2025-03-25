@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -40,7 +41,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     public static final double wristScoreTRotation = 0.15;
-    public static final double wristIntakeRotation = 0.292;
+    public static final double wristIntakeRotation = 0.29;
 
     /* Driver Buttons */
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -59,14 +60,19 @@ public class RobotContainer {
     private final Trigger setLevelFour = new Trigger(co_driver::getYButton);
     private final Trigger intakePosition = new Trigger(co_driver::getXButton);
     private final Trigger level4Score = new Trigger(co_driver::getLeftBumperButton);
+    private final Trigger volleyball = new Trigger(() -> co_driver.getPOV() == 90);
    
     /* Subsystems */
-    public Hand hand = new Hand();
+    public final Hand hand = new Hand();
     public final Swerve s_Swerve = new Swerve();
     public final Elevator elevator = new Elevator();
     public final Climber climber = new Climber();
 
     public final InstantCommand intakePositionCommand = new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation));
+    public final InstantCommand volleyBallCommand = new InstantCommand(() -> {
+        hand.setWantedPosition(0.45);
+        elevator.setWantedPosition(4.5);
+    });
 
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
         new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
@@ -93,6 +99,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", new shoot(hand));
         NamedCommands.registerCommand("IntakePos", intakePositionCommand);
         NamedCommands.registerCommand("ScorePosition", new scorePosition(hand));
+        NamedCommands.registerCommand("Level 4 Elevator", new level4Elevator(elevator, hand));
+        NamedCommands.registerCommand("Level 4 Score", new level4(hand));
+        NamedCommands.registerCommand("Elevator Zero", new InstantCommand(() -> elevator.setWantedPosition(0)));
         autochooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autochooser);
         
@@ -141,7 +150,7 @@ public class RobotContainer {
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(4.2);
+            elevator.setWantedPosition(4.35 );
             hand.setWantedPosition(wristScoreTRotation);
         }));
 
@@ -149,6 +158,8 @@ public class RobotContainer {
             elevator.setWantedPosition(10.3);
             hand.setWantedPosition(0.15);
         }));
+
+        volleyball.onTrue(volleyBallCommand);
 
         intakePosition.onTrue(intakePositionCommand);
 
@@ -160,7 +171,7 @@ public class RobotContainer {
         }));
         
         climberdown.whileTrue(new InstantCommand(() -> {
-            climber.setPosition(0); 
+            climber.setPosition(-0.6); 
             System.out.println("down");
         }));
 

@@ -21,7 +21,7 @@ import frc.robot.subsystems.Swerve;
 public class CoralStationAligment extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.12, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.14, 0.01, 0.00);
   Hand hand;
   double strafeValue;
   double driveValue;
@@ -29,7 +29,7 @@ public class CoralStationAligment extends Command {
   Swerve swerve;
   double timer;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(0, -0.32, Rotation2d.fromDegrees(0));
+  Pose2d wantedError = new Pose2d(0, -0.29, Rotation2d.fromDegrees(0));
   Transform2d error;
   String LimelightName = "limelight-old";
   /** Creates a new CoralStationAligment. */

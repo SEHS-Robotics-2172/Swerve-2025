@@ -58,7 +58,7 @@ public class Hand extends SubsystemBase {
       
       wristMotor.getConfigurator().apply(wristConfig);
       wristMotor.setPosition(0);
-      encoderConfig.MagnetSensor.MagnetOffset = 0.105713;
+      encoderConfig.MagnetSensor.MagnetOffset = -0.201904296875;
       encoder.getConfigurator().apply(encoderConfig);
       resetToAbsolute();
     }
