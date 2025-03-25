@@ -12,6 +12,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
+import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.LimelightHelpers.LimelightTarget_Detector;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
@@ -19,14 +22,14 @@ import frc.robot.subsystems.Swerve;
 public class ReefRight extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.075, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.05, 0.05, 0);
   Hand hand;
   double strafeValue;
   double driveValue;
   double rotationValue;
   Swerve swerve;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(0, -0.3, Rotation2d.fromDegrees(0));
+  Pose2d wantedError = new Pose2d(-0.18, -0.6, Rotation2d.fromDegrees(-18.6));
   Transform2d error;
   String LimelightName = "";
   double timer;
@@ -43,6 +46,7 @@ public class ReefRight extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0.2, 0, 0);
     pid = true;
     timer = 1;
     endTimer = 4;
@@ -77,10 +81,7 @@ public class ReefRight extends Command {
 
   if (!pid){
     timer -= Robot.kDefaultPeriod;
-    if(timer >= 0.15)
-      swerve.drive(new Translation2d(0, -0.26), 0, false, true);
-    else
-      swerve.drive(new Translation2d(1, 0), 0, false, true);
+    swerve.drive(new Translation2d(0.4, 0), 0, false, true);
   }
   
   // SmartDashboard.putNumber("X", error.getX());
@@ -88,7 +89,7 @@ public class ReefRight extends Command {
   // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
 
 
-  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.1 && Math.abs(error.getY()) < 0.1 && Math.abs(error.getRotation().getDegrees()) < 1 )) || endTimer <= 0)
+  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.15 && Math.abs(error.getY()) < 0.15 && Math.abs(error.getRotation().getDegrees()) < 0.1 )) || endTimer <= 0)
     pid = false;
 }
 
@@ -99,6 +100,7 @@ public class ReefRight extends Command {
     strafeController.reset();
     driveController.reset();
     rotationController.reset();
+    //LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0, 0, 0);
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22});
   }
 
