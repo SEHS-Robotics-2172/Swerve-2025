@@ -102,6 +102,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("Level 4 Elevator", new level4Elevator(elevator, hand));
         NamedCommands.registerCommand("Level 4 Score", new level4(hand));
         NamedCommands.registerCommand("Elevator Zero", new InstantCommand(() -> elevator.setWantedPosition(0)));
+        NamedCommands.registerCommand("Intake Align", new CoralStationAligment(s_Swerve, hand));
+        NamedCommands.registerCommand("Intake", new intake(hand));
+        
         autochooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autochooser);
         
