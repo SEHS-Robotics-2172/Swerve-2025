@@ -35,6 +35,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Elevator Zero"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "MiddleReef To Coral"
@@ -50,6 +56,18 @@
           "type": "named",
           "data": {
             "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral To MiddleReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReefRight"
           }
         }
       ]

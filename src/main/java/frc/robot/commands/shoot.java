@@ -42,7 +42,7 @@ public class shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer > 2){
+    if (timer > 1){
       return true;
     }
     return false;
