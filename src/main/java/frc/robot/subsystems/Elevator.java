@@ -15,9 +15,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,17 +23,17 @@ public class Elevator extends SubsystemBase {
   private TalonFX motor1;
   private TalonFX motor2;
   private SparkMax encoder;
-  private ProfiledPIDController elevatorController;
+  private PIDController elevatorController;
   double kP;
   double kI;
   double kD;
   double wantedPosition = 0;
   TalonFXConfiguration config = new TalonFXConfiguration(); 
   public Elevator() {
-    kP = 10;
-    kI = 0.1;
-    kD = 1;
-    elevatorController = new ProfiledPIDController(kP, kI, kD, (new Constraints(100, 1)));
+    kP = 7.5;
+    kI = 3;
+    kD = 0;
+    elevatorController = new PIDController(kP, kI, kD);
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     config.Feedback.SensorToMechanismRatio = 7.75 / 2;
     motor1 = new TalonFX(Constants.Elevator.motor1ID);
@@ -52,7 +49,7 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     double error = motor1.getPosition().getValueAsDouble() - wantedPosition;
     if (error >= 0){
-      elevatorController.setPID(kP/5, kI/5, kD);
+      elevatorController.setPID(kP/20, kI/20, kD);
     } else {
       elevatorController.setPID(kP, kI, kD);
     }

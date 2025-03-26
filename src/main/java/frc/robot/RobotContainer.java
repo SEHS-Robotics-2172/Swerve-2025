@@ -73,7 +73,7 @@ public class RobotContainer {
     public final InstantCommand intakePositionCommand = new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation));
     public final InstantCommand volleyBallCommand = new InstantCommand(() -> {
         hand.setWantedPosition(0.45);
-        elevator.setWantedPosition(5.5);
+        elevator.setWantedPosition(4.5);
     });
 
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
@@ -157,12 +157,12 @@ public class RobotContainer {
         setLevelTwo.onTrue(new InstantCommand(() -> hand.setWantedPosition(wristScoreTRotation)));
 
         setLevelThree.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(4.35 );
+            elevator.setWantedPosition(4.4);
             hand.setWantedPosition(wristScoreTRotation);
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(9.3);
+            elevator.setWantedPosition(9.1);
             hand.setWantedPosition(0.15);
         }));
 
@@ -178,7 +178,7 @@ public class RobotContainer {
         }));
         
         climberdown.whileTrue(new InstantCommand(() -> {
-            climber.setPosition(-0.6); 
+            climber.setPosition(-0); 
             System.out.println("down");
         }));
 
