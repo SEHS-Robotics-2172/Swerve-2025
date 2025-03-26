@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -40,7 +41,7 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    public static final double wristScoreTRotation = 0.15;
+    public static final double wristScoreTRotation = 0.14;
     public static final double wristIntakeRotation = 0.29;
 
     /* Driver Buttons */
@@ -52,6 +53,7 @@ public class RobotContainer {
     private final Trigger SlowDownButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final Trigger climberup = new Trigger(driver::getAButton);
     private final Trigger climberdown = new Trigger(driver::getBButton);
+    private final Trigger cancelCommand = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     
     /* Co-Driver Buttons */
     private final Trigger set0 = new JoystickButton(co_driver, XboxController.Button.kRightBumper.value);
@@ -71,7 +73,7 @@ public class RobotContainer {
     public final InstantCommand intakePositionCommand = new InstantCommand(() -> hand.setWantedPosition(wristIntakeRotation));
     public final InstantCommand volleyBallCommand = new InstantCommand(() -> {
         hand.setWantedPosition(0.45);
-        elevator.setWantedPosition(4.5);
+        elevator.setWantedPosition(5.5);
     });
 
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
@@ -137,6 +139,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
+        cancelCommand.onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancel(s_Swerve.getCurrentCommand())));
+
         SlowDownButton.whileTrue(new InstantCommand(() -> {
             // hand.resetToAbsolute();
             elevator.resetToAbsolute();
@@ -158,7 +162,7 @@ public class RobotContainer {
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(10.3);
+            elevator.setWantedPosition(9.3);
             hand.setWantedPosition(0.15);
         }));
 

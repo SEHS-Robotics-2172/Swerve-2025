@@ -67,7 +67,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Level 4 Elevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ReefRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Level 4 Score"
           }
         }
       ]

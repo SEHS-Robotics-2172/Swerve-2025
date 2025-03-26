@@ -22,14 +22,14 @@ import frc.robot.subsystems.Swerve;
 public class ReefLeft extends Command {
   PIDController strafeController = new PIDController(1, 0.001, 0.002);
   PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.05, 0.05, 0);
+  PIDController rotationController = new PIDController(0.05, 0.08, 0);
   Hand hand;
   double strafeValue;
   double driveValue;
   double rotationValue;
   Swerve swerve;
   Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(0.18, -0.6, Rotation2d.fromDegrees(18.6));
+  Pose2d wantedError = new Pose2d(0.18, -0.6, Rotation2d.fromDegrees(16.6));
   Transform2d error;
   String LimelightName = "";
   double timer;
@@ -49,7 +49,7 @@ public class ReefLeft extends Command {
     //LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0.2, 0, 0);
     pid = true;
     timer = 1;
-    endTimer = 4;
+    endTimer = 2;
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs

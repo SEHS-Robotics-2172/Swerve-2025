@@ -36,7 +36,7 @@ public class Hand extends SubsystemBase {
     CANcoder encoder;
 
     public Hand(){
-      handController = new PIDController(10, 5, 0);
+      handController = new PIDController(10, 7, 0);
       wristConfig.Feedback.SensorToMechanismRatio = 10;
       wristConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
       encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.8;
