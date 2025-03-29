@@ -10,6 +10,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -19,19 +26,20 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  private SparkMax climbMotor;
-  private PIDController pidClimb = new PIDController(60, 0, 0);
+  private TalonFX climbMotor;
+  private PIDController pidClimb = new PIDController(15*2, 0, 0);
   public double wantedPosition = 0;
+  private CANcoder encoder = new CANcoder(Constants.Climber.climbEncoderID);
+  private CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
 
-  SparkMaxConfig climb = new SparkMaxConfig();
+  TalonFXConfiguration climb = new TalonFXConfiguration();
   public Climber(){
-    climb.idleMode(IdleMode.kCoast);
-    climbMotor = new SparkMax(Constants.Climber.climbMotorID, MotorType.kBrushless);
-    climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    climb.inverted(false);
-    climb.idleMode(IdleMode.kBrake);
-    climbMotor.configure(climb, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    // climbMotor.getAlternateEncoder().setPosition(0);
+    climb.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    climb.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    climbMotor = new TalonFX(Constants.Climber.climbMotorID);
+    climbMotor.getConfigurator().apply(climb);
+    encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    encoder.getConfigurator().apply(encoderConfig);
   }
 
 
@@ -59,7 +67,7 @@ public class Climber extends SubsystemBase {
 
   public double getEncoderPosition() {
     // encoder nonsense
-    return climbMotor.getAlternateEncoder().getPosition();
+    return -encoder.getPosition().getValueAsDouble();
   }
   
 }

@@ -24,7 +24,7 @@ public class level4Elevator extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setWantedPosition(9.3);
+    elevator.setWantedPosition(9.12);
     hand.setWantedPosition(0.15);
   }
 }

@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     double error = motor1.getPosition().getValueAsDouble() - wantedPosition;
     if (error >= 0){
-      elevatorController.setPID(kP/20, kI/20, kD);
+      elevatorController.setPID(kP/15, kI/15, kD);
     } else {
       elevatorController.setPID(kP, kI, kD);
     }

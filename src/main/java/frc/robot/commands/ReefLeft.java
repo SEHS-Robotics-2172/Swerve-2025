@@ -20,9 +20,9 @@ import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReefLeft extends Command {
-  PIDController strafeController = new PIDController(1, 0.001, 0.002);
-  PIDController driveController = new PIDController(1.2, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.05, 0.08, 0);
+  PIDController strafeController = new PIDController(1.8, 0.001, 0.002);
+  PIDController driveController = new PIDController(1.8, 0.001, 0.002);
+  PIDController rotationController = new PIDController(0.15, 0.0, 0);
   Hand hand;
   double strafeValue;
   double driveValue;
@@ -49,7 +49,7 @@ public class ReefLeft extends Command {
     //LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0.2, 0, 0);
     pid = true;
     timer = 1;
-    endTimer = 2;
+    endTimer = 1;
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs
@@ -72,7 +72,7 @@ public class ReefLeft extends Command {
     rotationValue = rotationController.calculate(error.getRotation().getDegrees());
     swerve.drive(
       new Translation2d(driveValue, strafeValue),
-      rotationValue,
+      rotationValue / 3,
       false,
       true
       );
@@ -81,7 +81,7 @@ public class ReefLeft extends Command {
 
   if (!pid){
     timer -= Robot.kDefaultPeriod;
-    swerve.drive(new Translation2d(0.4, 0), 0, false, true);
+    swerve.drive(new Translation2d(0.5, 0), 0, false, true);
   }
   
   // SmartDashboard.putNumber("X", error.getX());

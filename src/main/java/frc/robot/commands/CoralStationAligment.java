@@ -66,7 +66,7 @@ public class CoralStationAligment extends Command {
       rotationValue = rotationController.calculate(error.getRotation().getDegrees());
       swerve.drive(
         new Translation2d(driveValue, strafeValue),
-        rotationValue,
+        rotationValue / 2,
         false,
         true
         );
