@@ -26,7 +26,7 @@ import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ReefLeft extends Command {
+public class ReefLeftLevel4 extends Command {
   PIDController strafeController = new PIDController(3, 0, 0);
   PIDController driveController = new PIDController(3, 0, 0);
   ProfiledPIDController rotationController = new ProfiledPIDController(4, 0, 0, (new Constraints(6.26, 3.14)));
@@ -37,7 +37,7 @@ public class ReefLeft extends Command {
   double rotationValue;
   Swerve swerve;
   Pose2d robotPosition;
-  Pose2d wantedError = new Pose2d(-0.17, -0.5, Rotation2d.fromDegrees(0));
+  Pose2d wantedError = new Pose2d(-0.22, -0.5, Rotation2d.fromDegrees(0));
   State goalState = new State(0, 0, 0, wantedError, 0);
   Transform2d error;
   String LimelightName = "";
@@ -45,7 +45,7 @@ public class ReefLeft extends Command {
   boolean pid;
   double endTimer;
   /** Creates a new Reef. */
-  public ReefLeft(Swerve swerve_, Hand hand_) {
+  public ReefLeftLevel4(Swerve swerve_, Hand hand_) {
     this.swerve = swerve_;
     this.hand = hand_;
     addRequirements(swerve_, hand_);

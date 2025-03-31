@@ -27,9 +27,9 @@ import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReefRight extends Command {
-  PIDController strafeController = new PIDController(1.8, 0, 0);
-  PIDController driveController = new PIDController(1.8, 0, 0);
-  ProfiledPIDController rotationController = new ProfiledPIDController(0.15, 0, 0, (new Constraints(6.26, 3.14)));
+  PIDController strafeController = new PIDController(3, 0, 0);
+  PIDController driveController = new PIDController(3, 0, 0);
+  ProfiledPIDController rotationController = new ProfiledPIDController(4, 0, 0, (new Constraints(6.26, 3.14)));
   HolonomicDriveController controller = new HolonomicDriveController(strafeController, driveController, rotationController);
   Hand hand;
   double strafeValue;
@@ -37,7 +37,7 @@ public class ReefRight extends Command {
   double rotationValue;
   Swerve swerve;
   Pose2d robotPosition;
-  Pose2d wantedError = new Pose2d(-0.16, -0.6, Rotation2d.fromDegrees(0));
+  Pose2d wantedError = new Pose2d(0.14, -0.5, Rotation2d.fromDegrees(0));
   State goalState = new State(0, 0, 0, wantedError, 0);
   Transform2d error;
   String LimelightName = "";
@@ -57,9 +57,11 @@ public class ReefRight extends Command {
   public void initialize() {
     //LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0.2, 0, 0);
     pid = true;
-    timer = 1;
-    endTimer = 1;
+    timer = 0.6;
+    endTimer = 10;
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
+    controller.setTolerance(new Pose2d(0.05, 0.05, Rotation2d.fromRotations(0.03)));
+
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs
   }
@@ -71,9 +73,9 @@ public class ReefRight extends Command {
 
   if (pid){
     robotPosition = new Pose2d(
-      -LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
+      LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ(),
-      Rotation2d.fromDegrees(LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ())
+      Rotation2d.fromRadians(-LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getRotation().getY())
       );
     ChassisSpeeds speeds = controller.calculate(robotPosition, goalState, Rotation2d.kZero);
     swerve.setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds));
@@ -90,7 +92,7 @@ public class ReefRight extends Command {
   // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
 
 
-  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.15 && Math.abs(error.getY()) < 0.15 && Math.abs(error.getRotation().getDegrees()) < 0.1 )) || endTimer <= 0)
+  if((LimelightHelpers.getTargetCount(LimelightName) == 0) || controller.atReference() || endTimer <= 0)
     pid = false;
 }
 

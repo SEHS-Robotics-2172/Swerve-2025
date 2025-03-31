@@ -48,8 +48,9 @@ public class RobotContainer {
     private final Trigger coralStation = new JoystickButton(driver, XboxController.Button.kX.value);
     private final Trigger zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final Trigger robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final Trigger reefLeftButton = new Trigger(() -> driver.getPOV() == 270);
+    private final Trigger reefLeftLevel4Button = new Trigger(() -> driver.getPOV() == 0);
     private final Trigger reefRightButton = new Trigger(() -> driver.getPOV() == 90);
+    private final Trigger reefLeftButton = new Trigger(() -> driver.getPOV() == 270);    
     private final Trigger SlowDownButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final Trigger climberup = new Trigger(driver::getAButton);
     private final Trigger climberdown = new Trigger(driver::getBButton);
@@ -96,7 +97,7 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         path.preventFlipping = true;
-        NamedCommands.registerCommand("ReefLeft", new ReefLeft(s_Swerve, hand));
+        NamedCommands.registerCommand("ReefLeft", new ReefLeftLevel4(s_Swerve, hand));
         NamedCommands.registerCommand("ReefRight", new ReefRight(s_Swerve, hand));
         NamedCommands.registerCommand("Shoot", new shoot(hand));
         NamedCommands.registerCommand("IntakePos", intakePositionCommand);
@@ -149,6 +150,7 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         coralStation.onTrue(new CoralStationAligment(s_Swerve, hand));
+        reefLeftLevel4Button.onTrue(new ReefLeftLevel4(s_Swerve, hand));
         reefLeftButton.onTrue(new ReefLeft(s_Swerve, hand));
         reefRightButton.onTrue(new ReefRight(s_Swerve, hand));
 
@@ -162,8 +164,8 @@ public class RobotContainer {
         }));
 
         setLevelFour.onTrue(new InstantCommand(() -> {
-            elevator.setWantedPosition(9.12);
-            hand.setWantedPosition(0.15);
+            elevator.setWantedPosition(9.25);
+            hand.setWantedPosition(0.17);
         }));
 
         volleyball.onTrue(volleyBallCommand);
