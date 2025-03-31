@@ -39,14 +39,14 @@ public class CoralStationAligment extends Command {
     addRequirements(swerve_);
     System.out.println("Initialized");
   }
-
+  //E
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     timer = 4;
     hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
-    LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1, 2, 12, 13}); // Only track these tag IDs
+    LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1, 2, 12, 13}); // // Only track these tag IDs
   }
 
   // Called every time the scheduler runs while the command is scheduled.

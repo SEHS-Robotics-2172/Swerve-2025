@@ -12,16 +12,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
-import frc.robot.LimelightHelpers.LimelightResults;
-import frc.robot.LimelightHelpers.LimelightTarget_Detector;
-import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Swerve;
 
@@ -78,7 +73,16 @@ public class ReefLeft extends Command {
       Rotation2d.fromDegrees(LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ())
       );
     ChassisSpeeds speeds = controller.calculate(robotPosition, goalState, Rotation2d.kZero);
-    swerve.setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds));
+    
+    swerve.drive(
+      new Translation2d(
+        speeds.vxMetersPerSecond,
+        speeds.vyMetersPerSecond
+      ),
+      speeds.omegaRadiansPerSecond,
+      false,
+      false
+    );
   }
 
 
