@@ -62,6 +62,8 @@ public class ReefLeft extends Command {
     //hand.setWantedPosition(RobotContainer.wristIntakeRotation);
     System.out.println(LimelightHelpers.getTargetCount(LimelightName));
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs
+    controller.setTolerance(new Pose2d(0.1, 0.1, Rotation2d.fromRotations(0.01)));
+    controller.setEnabled(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -90,7 +92,7 @@ public class ReefLeft extends Command {
   // SmartDashboard.putNumber("R", error.getRotation().getDegrees());
 
 
-  if(((LimelightHelpers.getTargetCount(LimelightName) == 0) || (Math.abs(error.getX()) < 0.15 && Math.abs(error.getY()) < 0.15 && Math.abs(error.getRotation().getDegrees()) < 0.1 )) || endTimer <= 0)
+  if((LimelightHelpers.getTargetCount(LimelightName) == 0) || controller.atReference() || endTimer <= 0)
     pid = false;
 }
 
