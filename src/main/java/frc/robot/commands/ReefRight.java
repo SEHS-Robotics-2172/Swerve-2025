@@ -4,12 +4,19 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.LimelightHelpers.LimelightResults;
@@ -20,16 +27,18 @@ import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReefRight extends Command {
-  PIDController strafeController = new PIDController(1.8, 0.001, 0.002);
-  PIDController driveController = new PIDController(1.8, 0.001, 0.002);
-  PIDController rotationController = new PIDController(0.15, 0.0, 0);
+  PIDController strafeController = new PIDController(1.8, 0, 0);
+  PIDController driveController = new PIDController(1.8, 0, 0);
+  ProfiledPIDController rotationController = new ProfiledPIDController(0.15, 0, 0, (new Constraints(6.26, 3.14)));
+  HolonomicDriveController controller = new HolonomicDriveController(strafeController, driveController, rotationController);
   Hand hand;
   double strafeValue;
   double driveValue;
   double rotationValue;
   Swerve swerve;
-  Pose2d targetPosition;
-  Pose2d wantedError = new Pose2d(-0.16, -0.6, Rotation2d.fromDegrees(-12.6));
+  Pose2d robotPosition;
+  Pose2d wantedError = new Pose2d(-0.16, -0.6, Rotation2d.fromDegrees(0));
+  State goalState = new State(0, 0, 0, wantedError, 0);
   Transform2d error;
   String LimelightName = "";
   double timer;
@@ -61,21 +70,13 @@ public class ReefRight extends Command {
     endTimer -= Robot.kDefaultPeriod;
 
   if (pid){
-    targetPosition = new Pose2d(
+    robotPosition = new Pose2d(
       -LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getX(), 
       LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ(),
-      Rotation2d.fromDegrees(LimelightHelpers.getTX(LimelightName))
+      Rotation2d.fromDegrees(LimelightHelpers.getCameraPose3d_TargetSpace(LimelightName).getZ())
       );
-    error = (targetPosition.minus(wantedError));
-    strafeValue = strafeController.calculate(error.getX());
-    driveValue = driveController.calculate(error.getY());
-    rotationValue = rotationController.calculate(error.getRotation().getDegrees());
-    swerve.drive(
-      new Translation2d(driveValue, strafeValue),
-      rotationValue / 3,
-      false,
-      true
-      );
+    ChassisSpeeds speeds = controller.calculate(robotPosition, goalState, Rotation2d.kZero);
+    swerve.setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds));
   }
 
 
@@ -97,9 +98,6 @@ public class ReefRight extends Command {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Ended");
-    strafeController.reset();
-    driveController.reset();
-    rotationController.reset();
     //LimelightHelpers.SetFidcuial3DOffset(LimelightName, 0, 0, 0);
     LimelightHelpers.SetFiducialIDFiltersOverride(LimelightName, new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22});
   }
