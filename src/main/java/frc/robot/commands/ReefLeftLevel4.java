@@ -29,7 +29,7 @@ import frc.robot.subsystems.Swerve;
 public class ReefLeftLevel4 extends Command {
   PIDController strafeController = new PIDController(3, 0, 0);
   PIDController driveController = new PIDController(3, 0, 0);
-  ProfiledPIDController rotationController = new ProfiledPIDController(4, 0, 0, (new Constraints(6.26, 3.14)));
+  ProfiledPIDController rotationController = new ProfiledPIDController(4, 0, 0, (new Constraints(6.28, 3.14)));
   HolonomicDriveController controller = new HolonomicDriveController(strafeController, driveController, rotationController);
   Hand hand;
   double strafeValue;
