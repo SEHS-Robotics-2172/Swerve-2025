@@ -30,7 +30,7 @@ public class intake extends Command {
   @Override
   public void execute() {
     timer += Robot.kDefaultPeriod;
-    newHand.setIntakeSpeed(.5);
+    newHand.setIntakeSpeed(.3);
   }
 
   // Called once the command ends or is interrupted.
